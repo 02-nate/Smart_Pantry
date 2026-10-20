@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartpantrymanager.R;
 import com.example.smartpantrymanager.data.DatabaseHelper;
 import com.example.smartpantrymanager.model.PantryItem;
+import com.example.smartpantrymanager.util.NavHelper;
+import com.example.smartpantrymanager.util.Prefs;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -23,6 +26,7 @@ public class PantryListActivity extends AppCompatActivity {
     private PantryAdapter adapter;
     private RecyclerView recycler;
     private TextView emptyText;
+    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class PantryListActivity extends AppCompatActivity {
         recycler.setAdapter(adapter);
         fab.setOnClickListener(v -> openEditor(-1));
 
+        bottomNav = findViewById(R.id.bottom_nav);
+        NavHelper.setup(this, bottomNav, R.id.nav_pantry);
+
         // Collapse the FAB to an icon while scrolling down so it does not hide rows.
         recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -57,10 +64,13 @@ public class PantryListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        NavHelper.highlight(bottomNav, R.id.nav_pantry);
         loadPantry();
     }
 
     private void loadPantry() {
+        // Settings may have changed while this screen was in the background.
+        adapter.setAutoScaleUnits(Prefs.isAutoScaleUnits(this));
         List<PantryItem> items = db.getAllPantryItems();
         adapter.submitList(items);
         boolean empty = items.isEmpty();

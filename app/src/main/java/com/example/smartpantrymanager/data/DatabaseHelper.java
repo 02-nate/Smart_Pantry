@@ -117,6 +117,20 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         return getWritableDatabase().insert(TABLE_PANTRY, null, toValues(item));
     }
 
+    /** Inserts several pantry items in one transaction, so either all or none are saved. */
+    public void insertPantryItems(List<PantryItem> items) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            for (PantryItem item : items) {
+                db.insertOrThrow(TABLE_PANTRY, null, toValues(item));
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     /** Returns every pantry item ordered by name, ignoring case. */
     public List<PantryItem> getAllPantryItems() {
         List<PantryItem> items = new ArrayList<>();

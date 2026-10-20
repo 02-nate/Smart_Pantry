@@ -12,7 +12,9 @@ import com.example.smartpantrymanager.R;
 import com.example.smartpantrymanager.data.DatabaseHelper;
 import com.example.smartpantrymanager.matching.RecipeMatcher;
 import com.example.smartpantrymanager.model.Recipe;
+import com.example.smartpantrymanager.util.NavHelper;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.time.LocalDate;
 
@@ -27,6 +29,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
     private RecipeAdapter almostAdapter;
     private TextView noStrictText;
     private View almostSection;
+    private BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +49,15 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         RecyclerView almostList = findViewById(R.id.recycler_almost);
         strictList.setAdapter(strictAdapter);
         almostList.setAdapter(almostAdapter);
+
+        bottomNav = findViewById(R.id.bottom_nav);
+        NavHelper.setup(this, bottomNav, R.id.nav_suggestions);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        NavHelper.highlight(bottomNav, R.id.nav_suggestions);
         // The pantry may have changed on another screen, so re-run matching every time.
         loadSuggestions();
     }

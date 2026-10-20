@@ -39,6 +39,14 @@ public class PantryAdapter extends ListAdapter<PantryItem, PantryAdapter.PantryV
         this.listener = listener;
     }
 
+    /** Switches between g / ml only and auto-scaled kg / L, rebinding rows if it changed. */
+    public void setAutoScaleUnits(boolean autoScale) {
+        if (autoScale != autoScaleUnits) {
+            autoScaleUnits = autoScale;
+            notifyItemRangeChanged(0, getItemCount());
+        }
+    }
+
     @NonNull
     @Override
     public PantryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

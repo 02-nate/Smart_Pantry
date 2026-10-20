@@ -3,7 +3,11 @@ package com.example.smartpantrymanager.data;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.smartpantrymanager.model.PantryItem;
 import com.example.smartpantrymanager.model.RecipeIngredient;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Inserts the 20 built-in South African recipes when the database is first created.
@@ -14,6 +18,8 @@ public final class RecipeSeeder {
     private static final String G = "g";
     private static final String ML = "ml";
     private static final String PCS = "pcs";
+    private static final String KG = "kg";
+    private static final String L = "L";
 
     private RecipeSeeder() {
     }
@@ -188,6 +194,26 @@ public final class RecipeSeeder {
                         "Sprinkle over the onion and cheese, fold and serve."),
                 ing("egg", 3, PCS), ing("cheese", 50, G), ing("onion", 1, PCS),
                 ing("milk", 30, ML));
+    }
+
+    /**
+     * Returns the demo pantry offered in Settings. It is chosen so that Chakalaka,
+     * Pap and Tomato Gravy, and Egg and Tomato Scramble match strictly while several
+     * other recipes are one ingredient short.
+     */
+    public static List<PantryItem> demoPantry() {
+        return Arrays.asList(
+                new PantryItem("onion", 3, PCS, null),
+                new PantryItem("tomatoes", 5, PCS, null),
+                new PantryItem("carrots", 2, PCS, null),
+                new PantryItem("green pepper", 1, PCS, null),
+                new PantryItem("baked beans", 410, G, null),
+                new PantryItem("curry powder", 50, G, null),
+                new PantryItem("sunflower oil", 750, ML, null),
+                new PantryItem("eggs", 6, PCS, null),
+                new PantryItem("salt", 500, G, null),
+                new PantryItem("mealie meal", 2, KG, null),
+                new PantryItem("milk", 1, L, null));
     }
 
     private static void insert(SQLiteDatabase db, String name, String steps,

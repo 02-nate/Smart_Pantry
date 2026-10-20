@@ -57,6 +57,34 @@
     <string name="step_line">%1$d. %2$s</string>
     <string name="toast_recipe_not_found">Recipe not found</string>
 
+    <!-- Bottom navigation -->
+    <string name="nav_pantry">Pantry</string>
+    <string name="nav_suggestions">Suggestions</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="title_settings">Settings</string>
+    <string name="setting_highlight_expiring">Highlight expiring items</string>
+    <string name="setting_highlight_expiring_summary">Show items that expire within 3 days or have already expired</string>
+    <string name="header_display_units">Display units</string>
+    <string name="units_base">Base units (g / ml)</string>
+    <string name="units_auto_scale">Auto-scale (kg / L)</string>
+    <string name="header_pantry_data">Pantry data</string>
+    <string name="action_load_demo">Load demo pantry</string>
+    <string name="action_clear_pantry">Clear pantry</string>
+    <string name="action_load">Load</string>
+    <string name="action_clear">Clear</string>
+    <string name="dialog_load_demo_title">Load demo pantry?</string>
+    <plurals name="dialog_load_demo_message">
+        <item quantity="one">This adds %1$d sample ingredient to your pantry. Existing items are kept.</item>
+        <item quantity="other">This adds %1$d sample ingredients to your pantry. Existing items are kept.</item>
+    </plurals>
+    <string name="dialog_clear_title">Clear pantry?</string>
+    <string name="dialog_clear_message">This permanently removes every ingredient from your pantry. Recipes are not affected.</string>
+    <string name="toast_demo_loaded">Demo pantry loaded</string>
+    <string name="toast_pantry_cleared">Pantry cleared</string>
+    <string name="about_line">%1$s · version %2$s</string>
+
     <!-- Unit choices; must match the labels in UnitType. -->
     <string-array name="units" translatable="false">
         <item>g</item>
