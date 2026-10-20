@@ -72,18 +72,18 @@
     <string name="units_base">Base units (g / ml)</string>
     <string name="units_auto_scale">Auto-scale (kg / L)</string>
     <string name="header_pantry_data">Pantry data</string>
-    <string name="action_load_demo">Load demo pantry</string>
+    <string name="action_reset_demo">Reset to demo pantry</string>
     <string name="action_clear_pantry">Clear pantry</string>
-    <string name="action_load">Load</string>
+    <string name="action_reset">Reset</string>
     <string name="action_clear">Clear</string>
-    <string name="dialog_load_demo_title">Load demo pantry?</string>
-    <plurals name="dialog_load_demo_message">
-        <item quantity="one">This adds %1$d sample ingredient to your pantry. Existing items are kept.</item>
-        <item quantity="other">This adds %1$d sample ingredients to your pantry. Existing items are kept.</item>
+    <string name="dialog_reset_demo_title">Reset to demo pantry?</string>
+    <plurals name="dialog_reset_demo_message">
+        <item quantity="one">This removes everything in your pantry and replaces it with %1$d demo ingredient.</item>
+        <item quantity="other">This removes everything in your pantry and replaces it with %1$d demo ingredients.</item>
     </plurals>
     <string name="dialog_clear_title">Clear pantry?</string>
     <string name="dialog_clear_message">This permanently removes every ingredient from your pantry. Recipes are not affected.</string>
-    <string name="toast_demo_loaded">Demo pantry loaded</string>
+    <string name="toast_demo_reset">Pantry reset to demo ingredients</string>
     <string name="toast_pantry_cleared">Pantry cleared</string>
     <string name="about_line">%1$s · version %2$s</string>
 

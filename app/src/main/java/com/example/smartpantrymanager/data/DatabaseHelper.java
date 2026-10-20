@@ -96,6 +96,9 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(SQL_CREATE_RECIPES);
             db.execSQL(SQL_CREATE_RECIPE_INGREDIENTS);
             RecipeSeeder.seed(db);
+            // onCreate only runs when the database file does not exist yet, so the demo
+            // pantry never overwrites the user's own edits on later launches.
+            insertPantryRows(db, RecipeSeeder.demoPantry());
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -117,14 +120,16 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         return getWritableDatabase().insert(TABLE_PANTRY, null, toValues(item));
     }
 
-    /** Inserts several pantry items in one transaction, so either all or none are saved. */
-    public void insertPantryItems(List<PantryItem> items) {
+    /**
+     * Replaces the whole pantry with the demo items. Clearing and inserting share one
+     * transaction, so the pantry is never left half-reset and demo items are never duplicated.
+     */
+    public void resetToDemoPantry() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            for (PantryItem item : items) {
-                db.insertOrThrow(TABLE_PANTRY, null, toValues(item));
-            }
+            db.delete(TABLE_PANTRY, null, null);
+            insertPantryRows(db, RecipeSeeder.demoPantry());
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -225,6 +230,12 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // ---- Row mapping ----
+
+    private static void insertPantryRows(SQLiteDatabase db, List<PantryItem> items) {
+        for (PantryItem item : items) {
+            db.insertOrThrow(TABLE_PANTRY, null, toValues(item));
+        }
+    }
 
     private static ContentValues toValues(PantryItem item) {
         ContentValues values = new ContentValues();

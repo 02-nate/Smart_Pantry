@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.smartpantrymanager.R;
 import com.example.smartpantrymanager.data.DatabaseHelper;
 import com.example.smartpantrymanager.data.RecipeSeeder;
-import com.example.smartpantrymanager.model.PantryItem;
 import com.example.smartpantrymanager.util.NavHelper;
 import com.example.smartpantrymanager.util.Prefs;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -20,9 +19,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-import java.util.List;
-
-/** User preferences plus pantry maintenance actions (load demo data, clear all). */
+/** User preferences plus pantry maintenance actions (reset to demo data, clear all). */
 public class SettingsActivity extends AppCompatActivity {
 
     private DatabaseHelper db;
@@ -50,9 +47,9 @@ public class SettingsActivity extends AppCompatActivity {
         unitsGroup.setOnCheckedChangeListener((group, checkedId) ->
                 Prefs.setAutoScaleUnits(this, checkedId == R.id.radio_auto_scale));
 
-        MaterialButton loadDemoButton = findViewById(R.id.button_load_demo);
+        MaterialButton resetDemoButton = findViewById(R.id.button_reset_demo);
         MaterialButton clearButton = findViewById(R.id.button_clear_pantry);
-        loadDemoButton.setOnClickListener(v -> confirmLoadDemo());
+        resetDemoButton.setOnClickListener(v -> confirmResetDemo());
         clearButton.setOnClickListener(v -> confirmClear());
 
         TextView about = findViewById(R.id.text_about);
@@ -65,16 +62,16 @@ public class SettingsActivity extends AppCompatActivity {
         NavHelper.highlight(bottomNav, R.id.nav_settings);
     }
 
-    private void confirmLoadDemo() {
-        List<PantryItem> demo = RecipeSeeder.demoPantry();
+    private void confirmResetDemo() {
+        int demoCount = RecipeSeeder.demoPantry().size();
         new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_load_demo_title)
+                .setTitle(R.string.dialog_reset_demo_title)
                 .setMessage(getResources().getQuantityString(
-                        R.plurals.dialog_load_demo_message, demo.size(), demo.size()))
+                        R.plurals.dialog_reset_demo_message, demoCount, demoCount))
                 .setNegativeButton(R.string.action_cancel, null)
-                .setPositiveButton(R.string.action_load, (dialog, which) -> {
-                    db.insertPantryItems(demo);
-                    Toast.makeText(this, R.string.toast_demo_loaded, Toast.LENGTH_SHORT).show();
+                .setPositiveButton(R.string.action_reset, (dialog, which) -> {
+                    db.resetToDemoPantry();
+                    Toast.makeText(this, R.string.toast_demo_reset, Toast.LENGTH_SHORT).show();
                 })
                 .show();
     }

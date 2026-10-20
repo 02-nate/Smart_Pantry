@@ -8,13 +8,14 @@ Suggestions follow a **strict matching rule**: a recipe appears under "Cook now"
 
 ## Features
 
+- Opens with a pre-loaded demo pantry on first run, so suggestions appear straight away (your later edits and deletions are kept)
 - Add, edit and delete pantry ingredients with quantity, unit and an optional expiry date
 - Validation on every field (name, quantity range, unit)
 - 20 built-in South African recipes (Chakalaka, Pap and Tomato Gravy, Bobotie, Vetkoek and more)
 - Strict "Cook now" suggestions plus an "Almost there — missing 1 ingredient" list
 - Recipe detail with a ✓ / ✗ status for each ingredient and a numbered method
 - Expiry highlighting: amber for items expiring within 3 days, red for expired items (expired items are never used for suggestions)
-- Settings: toggle highlighting, choose base units (g / ml) or auto-scale (kg / L), load a demo pantry, clear the pantry
+- Settings: toggle highlighting, choose base units (g / ml) or auto-scale (kg / L), reset to the demo pantry, clear the pantry
 - Bottom navigation between Pantry, Suggestions and Settings
 - Material 3 design with light and dark themes
 - Fully offline: no account, no network, no location
@@ -50,7 +51,9 @@ Why SQLite:
 2. In Android Studio choose **File → Open** and select the project folder.
 3. Let Gradle sync finish.
 4. Pick an emulator or a connected device running Android 8.0 or later and press **Run**.
-5. Optional: open **Settings → Load demo pantry** to try the suggestions immediately.
+5. The app opens with a demo pantry already loaded. To start from scratch use **Settings → Clear pantry**; to restore the demo data use **Settings → Reset to demo pantry**.
+
+> If an older build of the app is already installed, the demo pantry is only added when the database is first created. Uninstall the app (or clear its storage) once to see the pre-loaded pantry.
 
 **Run the unit tests**
 
@@ -69,7 +72,7 @@ app/src/main/java/com/example/smartpantrymanager/
 │   └── RecipeIngredient.java
 ├── data/
 │   ├── DatabaseHelper.java          SQLiteOpenHelper singleton: schema, pantry CRUD, recipe reads
-│   └── RecipeSeeder.java            20 seed recipes + demo pantry
+│   └── RecipeSeeder.java            20 seed recipes + demo pantry (pre-loaded on first run)
 ├── matching/                        pure Java, no Android imports
 │   ├── Dimension.java
 │   ├── UnitType.java
@@ -90,6 +93,8 @@ app/src/main/java/com/example/smartpantrymanager/
     └── QuantityFormatter.java
 
 app/src/test/java/com/example/smartpantrymanager/
+├── data/
+│   └── RecipeSeederTest.java
 ├── matching/
 │   ├── IngredientNormalizerTest.java
 │   └── RecipeMatcherTest.java

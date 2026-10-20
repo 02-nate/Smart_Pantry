@@ -11,8 +11,10 @@
 
 ## 1:00–3:30 — Live demo (emulator or phone)
 
-1. **Load the demo pantry and show the suggestions** (≈ 0:30)
-   - Settings → **Load demo pantry** → confirm.
+1. **Empty state, then the demo pantry and its suggestions** (≈ 0:30)
+   - Say that the app opens with a demo pantry pre-loaded on first run.
+   - Settings → **Clear pantry** → confirm. Pantry tab: show the empty-state message.
+   - Settings → **Reset to demo pantry** → confirm.
    - Pantry tab: show the 11 items. Point out "2 kg" mealie meal and "1 L" milk (auto-scale).
    - Suggestions tab: **Cook now** shows Chakalaka, Egg and Tomato Scramble, and Pap and Tomato Gravy. **Almost there** shows Cheese Omelette (cheese), Fried Cabbage (cabbage) and Morogo and Pap (spinach).
 2. **Delete carrots, and Chakalaka moves to Almost There** (≈ 0:25)

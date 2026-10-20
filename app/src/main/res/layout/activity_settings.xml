@@ -70,10 +70,10 @@
                 android:text="@string/header_pantry_data" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_load_demo"
+                android:id="@+id/button_reset_demo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/action_load_demo" />
+                android:text="@string/action_reset_demo" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_clear_pantry"

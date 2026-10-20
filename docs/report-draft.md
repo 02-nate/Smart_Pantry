@@ -65,6 +65,8 @@ See `docs/screen-flow.md` (Mermaid flowchart). [Export the diagram as an image a
 
 SQLite through `SQLiteOpenHelper`, with three tables: `pantry_items`, `recipes` and `recipe_ingredients`. Each recipe has many ingredients (a one-to-many relationship), and deleting a recipe cascades to its ingredients. Foreign keys are enabled in `onConfigure`. Every query uses `?` placeholder arguments. See `docs/er-diagram.md`. [Insert the exported ER diagram here.]
 
+On first run, `onCreate` seeds the 20 recipes and a demo pantry in a single transaction. Because `onCreate` only runs when the database file is first created, the user's later edits and deletions are never overwritten.
+
 **Why SQLite:** the data is stored on the device and works offline, needs no account or network, suits one user's small relational data set, matches the module's persistent-data content, and persists across app restarts.
 
 ### 4.4 Matching algorithm
@@ -79,11 +81,11 @@ SQLite through `SQLiteOpenHelper`, with three tables: `pantry_items`, `recipes` 
 
 ## 5. Screenshots
 
-[SCREENSHOT: Pantry list — empty state]
-*Figure 1: The pantry list on first launch, showing the empty-state message that guides the user to the "Add ingredient" button.*
+[SCREENSHOT: Pantry list — pre-loaded demo pantry on first launch]
+*Figure 1: The pantry list on first launch. The demo pantry is inserted when the database is created, so the items are sorted alphabetically with quantities formatted using auto-scale (for example 2 kg, 1 L).*
 
-[SCREENSHOT: Pantry list — populated after loading the demo pantry]
-*Figure 2: The pantry list with demo ingredients, sorted alphabetically, with quantities formatted using auto-scale (for example 2 kg, 1 L).*
+[SCREENSHOT: Pantry list — empty state after Settings → Clear pantry]
+*Figure 2: The empty-state message, reached through Settings → Clear pantry, which guides the user to the "Add ingredient" button. The demo data can be restored with Settings → Reset to demo pantry.*
 
 [SCREENSHOT: Add Ingredient form — empty]
 *Figure 3: The Add Ingredient form with name, quantity, unit dropdown and optional expiry date.*
@@ -119,16 +121,19 @@ SQLite through `SQLiteOpenHelper`, with three tables: `pantry_items`, `recipes` 
 *Figure 13: Recipe detail showing which ingredients are in the pantry (✓) and which are missing (✗), followed by the numbered method.*
 
 [SCREENSHOT: Settings screen]
-*Figure 14: Settings with the highlight switch, the display-units choice, the demo pantry and clear pantry buttons, and the About line.*
+*Figure 14: Settings with the highlight switch, the display-units choice, the "Reset to demo pantry" and "Clear pantry" buttons, and the About line.*
 
 [SCREENSHOT: Clear pantry confirmation dialog]
 *Figure 15: Confirmation before every pantry item is removed.*
 
+[SCREENSHOT: Reset to demo pantry confirmation dialog]
+*Figure 16: Confirmation before the pantry is replaced with the demo ingredients. Clearing and re-inserting happen in one transaction, so items are never duplicated.*
+
 [SCREENSHOT: Expiry highlighting — "Expires soon" (amber) and "Expired" (red)]
-*Figure 16: Expiry highlighting on the pantry list. Expired items are labelled as not used for suggestions.*
+*Figure 17: Expiry highlighting on the pantry list. Expired items are labelled as not used for suggestions.*
 
 [SCREENSHOT: Dark theme (optional)]
-*Figure 17: The same screen in dark mode.*
+*Figure 18: The same screen in dark mode.*
 
 ---
 
