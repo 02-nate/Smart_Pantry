@@ -110,4 +110,4 @@ docs/
 
 ## Author
 
-[STUDENT NAME] — [STUDENT NUMBER]
+Zuziwe Shelembe — 402414481

@@ -9,8 +9,8 @@
 **Smart Pantry Manager**
 Mobile App Development 700
 
-Student: [STUDENT NAME]
-Student number: [STUDENT NUMBER]
+Student: Zuziwe Shelembe
+Student number: 402414481
 Lecturer: [LECTURER NAME]
 Submission date: [DATE]
 Repository: [GITHUB URL]
