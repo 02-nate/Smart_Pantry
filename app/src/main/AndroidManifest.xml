@@ -19,6 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.AddEditIngredientActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.PantryListActivity"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

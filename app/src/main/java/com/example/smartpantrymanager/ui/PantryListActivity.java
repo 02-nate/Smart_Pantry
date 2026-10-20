@@ -1,5 +1,6 @@
 package com.example.smartpantrymanager.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -36,8 +37,9 @@ public class PantryListActivity extends AppCompatActivity {
         emptyText = findViewById(R.id.text_empty);
         ExtendedFloatingActionButton fab = findViewById(R.id.fab_add);
 
-        adapter = new PantryAdapter(item -> { });
+        adapter = new PantryAdapter(item -> openEditor(item.getId()));
         recycler.setAdapter(adapter);
+        fab.setOnClickListener(v -> openEditor(-1));
 
         // Collapse the FAB to an icon while scrolling down so it does not hide rows.
         recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -64,5 +66,14 @@ public class PantryListActivity extends AppCompatActivity {
         boolean empty = items.isEmpty();
         emptyText.setVisibility(empty ? View.VISIBLE : View.GONE);
         recycler.setVisibility(empty ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    /** Opens the add/edit form; a negative id opens it in add mode. */
+    private void openEditor(long itemId) {
+        Intent intent = new Intent(this, AddEditIngredientActivity.class);
+        if (itemId >= 0) {
+            intent.putExtra(AddEditIngredientActivity.EXTRA_ITEM_ID, itemId);
+        }
+        startActivity(intent);
     }
 }
