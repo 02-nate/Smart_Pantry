@@ -39,7 +39,7 @@ The core rule is **strict matching**. A recipe is suggested under "Cook now" onl
 
 The target users are students and households who cook on a budget and want to use what they already have.
 
-[STUDENT: add one or two sentences on why you chose this problem.]
+I chose this problem because it is practical, it works fully offline, and its strict-matching rule puts a clear, testable piece of logic at the centre of the app.
 
 ---
 
@@ -248,49 +248,61 @@ The adapter uses the ViewHolder pattern, so `findViewById` runs once per row vie
 
 ## 7. Challenges and solutions
 
-### 7.1 [Challenge title]
-[STUDENT: describe the real problem you hit]
+### 7.1 Matching messy ingredient names and units
+The strict-matching rule only works if the app recognises that "Tomatoes", "tomato" and " TOMATO " are the same ingredient, and that 1 kg of maize meal covers a recipe that needs 500 g. A plain string comparison failed both cases. During testing I also found that the simple plural rules turned "cheeses" into "chees", so a pantry entry would not match the Cheese Omelette recipe.
 
-**Solution:** [STUDENT: describe how you solved it]
+**Solution:** I wrote `IngredientNormalizer`, which lowercases and cleans each name, singularises the last word and applies an alias map (for example "mealie meal" → "maize meal"). An irregular-plurals map (cheeses → cheese, leaves → leaf) is checked before the suffix rules. Units are converted to a base unit through `UnitType` before quantities are compared. Each case is covered by a JUnit test in `IngredientNormalizerTest` and `RecipeMatcherTest`.
 
-### 7.2 [Challenge title]
-[STUDENT: describe the real problem you hit]
+### 7.2 A hidden exception to the "every ingredient" rule
+My first version treated water as always available, because nobody records tap water as a pantry item. On review this broke the brief's rule that a recipe appears only when every listed ingredient is in the pantry: Pap and Tomato Gravy could be suggested even though one of its ingredients was missing.
 
-**Solution:** [STUDENT: describe how you solved it]
+**Solution:** I removed the exception from `RecipeMatcher` completely. Water was taken out of every recipe's ingredient list and its amount was moved into the method steps instead (for example "Bring 1 litre of salted water to the boil"). A unit test now confirms that every listed ingredient must be present, with no exceptions.
 
-### 7.3 [Challenge title]
-[STUDENT: describe the real problem you hit]
+### 7.3 Keeping demo data without breaking persistence
+I wanted the app to open with a demo pantry so suggestions appear straight away. If the demo items were inserted on every launch, deleted items would come back after a restart, which would look like broken CRUD and fail the persistence requirement. A "reset to demo" button also risked inserting the same items twice.
 
-**Solution:** [STUDENT: describe how you solved it]
+**Solution:** The demo pantry is inserted inside `DatabaseHelper.onCreate()`, in the same transaction as the recipe seeding. `onCreate()` runs only when the database file is first created, so later edits and deletions are kept. I removed the reset button, which means "Clear pantry" is the last step in my demo.
+
+### 7.4 Unit dropdown losing its options
+On the Add/Edit screen, after an item was pre-filled for editing or the screen was rotated, the unit dropdown filtered itself down to the one unit already selected, so the user could not pick a different unit.
+
+**Solution:** `MaterialAutoCompleteTextView` filters its list whenever its text is set. Setting the unit with `unitInput.setText(unit, false)` turns the filter off, so the full list of units stays available.
+
+### 7.5 Build environment
+Gradle failed from the command line because the Java on my system PATH was Java 8, which is too old for the current Android Gradle Plugin.
+
+**Solution:** I built and ran the tests with Android Studio's bundled JDK (version 21) by pointing the Gradle JDK setting at it, instead of the system Java.
 
 ---
 
 ## 8. Conclusion and reflection
 
-[STUDENT: summarise what the app achieves against the brief.]
+Smart Pantry Manager meets the brief. It lets the user add, edit and delete pantry ingredients with validated input, stores them in SQLite so they survive the app being closed, ships with 20 seeded South African recipes, and suggests only the recipes whose every ingredient is in the pantry in at least the required quantity. Recipes missing exactly one ingredient are shown in a separate "Almost there" list, and a Settings screen controls expiry highlighting and how units are displayed.
 
-[STUDENT: reflect on what you learned, for example about RecyclerView adapters, Intents, the Activity lifecycle and SQLite.]
+Building the app showed me how the pieces of an Android app fit together. A RecyclerView adapter separates the data from the way each row is drawn, and the ViewHolder pattern keeps scrolling smooth. Explicit Intents with extras are a simple way to pass an id between screens, and refreshing lists in `onResume()` keeps every screen up to date as the user moves around. Keeping the matching logic in plain Java classes with no Android dependencies meant I could test the hardest part of the app with fast JUnit tests instead of clicking through the screens each time.
 
 **What I would improve**
 
 - **Move database work off the main thread.** All queries and writes currently run on the UI thread, in `onResume()` and in `AddEditIngredientActivity.save()`. That is fine for a small pantry, but a larger data set could make the UI stutter. I would run them on a background `Executor` and post the results back to the UI thread.
 - **Replace the destructive `onUpgrade()`.** `DatabaseHelper.onUpgrade()` drops and recreates every table, which is acceptable at version 1 but would erase the user's pantry on any future schema change. I would write step-by-step migrations (for example `ALTER TABLE`) that keep existing data.
-- [STUDENT: add your own ideas. Possible ideas: per-ingredient densities instead of 1 g ≈ 1 ml, a shopping list built from "Almost there", or deducting ingredients after cooking.]
+- **Use real densities instead of 1 g ≈ 1 ml.** Storing a density per ingredient would make mass-to-volume comparisons accurate, for example for flour measured in cups.
+- **Build a shopping list from "Almost there".** The missing ingredient for each almost-matched recipe could be added to a shopping list with one tap.
+- **Deduct ingredients after cooking.** A "I cooked this" button could subtract the recipe's quantities from the pantry automatically.
 
 ---
 
 ## 9. References
 
-Android Developers (n.d.) *Activity lifecycle*. Available at: https://developer.android.com/guide/components/activities/activity-lifecycle (Accessed: [DATE]).
+Android Developers (n.d.) *Activity lifecycle*. Available at: https://developer.android.com/guide/components/activities/activity-lifecycle (Accessed: 20 October 2026).
 
-Android Developers (n.d.) *Create dynamic lists with RecyclerView*. Available at: https://developer.android.com/develop/ui/views/layout/recyclerview (Accessed: [DATE]).
+Android Developers (n.d.) *Create dynamic lists with RecyclerView*. Available at: https://developer.android.com/develop/ui/views/layout/recyclerview (Accessed: 20 October 2026).
 
-Android Developers (n.d.) *Intents and intent filters*. Available at: https://developer.android.com/guide/components/intents-filters (Accessed: [DATE]).
+Android Developers (n.d.) *Intents and intent filters*. Available at: https://developer.android.com/guide/components/intents-filters (Accessed: 20 October 2026).
 
-Android Developers (n.d.) *Save data using SQLite*. Available at: https://developer.android.com/training/data-storage/sqlite (Accessed: [DATE]).
+Android Developers (n.d.) *Save data using SQLite*. Available at: https://developer.android.com/training/data-storage/sqlite (Accessed: 20 October 2026).
 
-Android Developers (n.d.) *SQLiteOpenHelper*. Available at: https://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper (Accessed: [DATE]).
+Android Developers (n.d.) *SQLiteOpenHelper*. Available at: https://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper (Accessed: 20 October 2026).
 
-Android Developers (n.d.) *Save simple data with SharedPreferences*. Available at: https://developer.android.com/training/data-storage/shared-preferences (Accessed: [DATE]).
+Android Developers (n.d.) *Save simple data with SharedPreferences*. Available at: https://developer.android.com/training/data-storage/shared-preferences (Accessed: 20 October 2026).
 
-Material Design (n.d.) *Material Components for Android*. Available at: https://m3.material.io/develop/android/mdc-android (Accessed: [DATE]).
+Material Design (n.d.) *Material Components for Android*. Available at: https://m3.material.io/develop/android/mdc-android (Accessed: 20 October 2026).
