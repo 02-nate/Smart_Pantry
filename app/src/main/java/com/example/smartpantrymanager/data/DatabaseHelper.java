@@ -95,6 +95,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(SQL_CREATE_PANTRY);
             db.execSQL(SQL_CREATE_RECIPES);
             db.execSQL(SQL_CREATE_RECIPE_INGREDIENTS);
+            RecipeSeeder.seed(db);
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
