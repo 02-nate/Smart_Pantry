@@ -42,6 +42,12 @@ public class IngredientNormalizerTest {
     }
 
     @Test
+    public void normalizeName_handlesIrregularPlurals() {
+        assertEquals("cheese", IngredientNormalizer.normalizeName("cheeses"));
+        assertEquals("bay leaf", IngredientNormalizer.normalizeName("Bay Leaves"));
+    }
+
+    @Test
     public void parseUnit_kgHasFactor1000() {
         UnitType unit = IngredientNormalizer.parseUnit("KG");
         assertEquals(UnitType.KG, unit);

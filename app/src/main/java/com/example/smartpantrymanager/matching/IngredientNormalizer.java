@@ -13,8 +13,21 @@ public final class IngredientNormalizer {
 
     private static final Map<String, String> ALIASES;
     private static final Map<String, UnitType> UNIT_SPELLINGS;
+    /** Words the suffix rules would get wrong, mapped to their singular form. */
+    private static final Map<String, String> IRREGULAR_PLURALS;
 
     static {
+        Map<String, String> irregular = new HashMap<>();
+        irregular.put("cheeses", "cheese");
+        irregular.put("leaves", "leaf");
+        irregular.put("loaves", "loaf");
+        irregular.put("knives", "knife");
+        // Already singular, but the suffix rules would strip their ending.
+        irregular.put("molasses", "molasses");
+        irregular.put("hummus", "hummus");
+        irregular.put("couscous", "couscous");
+        IRREGULAR_PLURALS = Collections.unmodifiableMap(irregular);
+
         Map<String, String> aliases = new HashMap<>();
         addAliases(aliases, "maize meal", "mealie meal", "mielie meal", "maize");
         addAliases(aliases, "beef mince", "mince", "minced beef", "ground beef");
@@ -87,8 +100,15 @@ public final class IngredientNormalizer {
         return unit;
     }
 
-    /** Singularises one word using a small set of English suffix rules, applied in order. */
+    /**
+     * Singularises one word: irregular plurals (and words that only look plural) are looked up
+     * first, then a small set of English suffix rules is applied in order.
+     */
     static String singularize(String word) {
+        String irregular = IRREGULAR_PLURALS.get(word);
+        if (irregular != null) {
+            return irregular;
+        }
         if (word.endsWith("ies") && word.length() > 3) {
             return word.substring(0, word.length() - 3) + "y";
         }
