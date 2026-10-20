@@ -14,11 +14,10 @@ Suggestions follow a **strict matching rule**: a recipe appears under "Cook now"
 - 20 built-in South African recipes (Chakalaka, Pap and Tomato Gravy, Bobotie, Vetkoek and more)
 - Strict "Cook now" suggestions plus an "Almost there — missing 1 ingredient" list
 - Recipe detail with a ✓ / ✗ status for each ingredient and a numbered method
-- Expiry countdown on every pantry tile; with highlighting on, items expiring within 3 days are labelled "Expires soon", the number turns red at 2 days or fewer, and expired items are labelled as not used for suggestions
-- Summary tiles: total items and expiring-soon count on the pantry screen, "Cook now" and "Almost there" counts on the suggestions screen
+- Expiry highlighting: amber for items expiring within 3 days, red for expired items (expired items are never used for suggestions)
 - Settings: toggle highlighting, choose base units (g / ml) or auto-scale (kg / L), clear the pantry
-- Text-only bottom navigation between Stock, Recipes and Settings
-- "Pantry Archive" visual design: white page, bold black type, flat pastel tiles with 32dp corners
+- Bottom navigation between Pantry, Suggestions and Settings
+- Material 3 design with light and dark themes
 - Fully offline: no account, no network, no location
 
 ## Database choice
@@ -89,7 +88,6 @@ app/src/main/java/com/example/smartpantrymanager/
 │   ├── PantryAdapter.java
 │   └── RecipeAdapter.java
 └── util/
-    ├── CardFills.java               card colour rotation (lime, white, lavender, mint)
     ├── NavHelper.java
     ├── Prefs.java
     └── QuantityFormatter.java

@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Inventory tile: name, zero-padded days-left numeral, then a hairline footer. -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_pantry"
-    style="@style/Widget.Pantry.Card"
+    style="@style/Widget.SmartPantry.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/card_gap"
+    android:layout_marginHorizontal="@dimen/card_margin_horizontal"
+    android:layout_marginVertical="@dimen/card_margin_vertical"
     android:clickable="true"
-    android:focusable="true"
-    app:cardBackgroundColor="@color/bg_green">
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,44 +18,39 @@
 
         <TextView
             android:id="@+id/text_name"
-            style="@style/Text.ItemName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/name_to_number"
+            android:textAppearance="@style/TextAppearance.SmartPantry.CardTitle"
             tools:text="Tomatoes" />
 
         <TextView
-            android:id="@+id/text_days"
-            style="@style/Text.Days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="02" />
-
-        <View style="@style/Hairline" />
-
-        <LinearLayout
+            android:id="@+id/text_quantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="true"
-            android:orientation="horizontal"
-            android:paddingTop="@dimen/footer_padding_top">
+            android:layout_marginTop="@dimen/text_spacing_small"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            tools:text="5 pcs" />
 
-            <TextView
-                android:id="@+id/text_expiry_label"
-                style="@style/Text.Meta"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/spacing_medium"
-                android:layout_weight="1"
-                tools:text="Expires soon · 22 Oct 2026" />
+        <TextView
+            android:id="@+id/text_expiry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_spacing_small"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:visibility="gone"
+            tools:text="Expires 25 Oct 2026"
+            tools:visibility="visible" />
 
-            <TextView
-                android:id="@+id/text_quantity"
-                style="@style/Text.Meta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="5 pcs" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/text_expiry_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_spacing_small"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="@string/label_expiring_soon"
+            tools:visibility="visible" />
 
     </LinearLayout>
 

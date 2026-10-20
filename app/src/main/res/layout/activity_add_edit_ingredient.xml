@@ -21,114 +21,103 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/screen_padding">
 
-            <TextView
-                android:id="@+id/text_display"
-                style="@style/Masthead"
-                tools:text="@string/display_add_ingredient" />
-
-            <View style="@style/Hairline" />
-
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/gutter_text">
+                android:hint="@string/hint_name"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/name_max_length">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_name"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_name"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="@integer/name_max_length">
+                    android:importantForAutofill="no"
+                    android:inputType="textCapSentences"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:importantForAutofill="no"
-                        android:inputType="textCapSentences"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/field_spacing"
+                android:hint="@string/hint_quantity">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_quantity"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/field_spacing"
-                    android:hint="@string/hint_quantity">
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_quantity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:importantForAutofill="no"
-                        android:inputType="numberDecimal"
-                        android:maxLines="1" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_unit"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/field_spacing"
+                android:hint="@string/hint_unit">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_unit"
-                    style="@style/Widget.Pantry.TextInputLayout.Dropdown"
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/edit_unit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/field_spacing"
-                    android:hint="@string/hint_unit">
+                    android:inputType="none"
+                    app:simpleItems="@array/units" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/edit_unit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="none"
-                        app:simpleItems="@array/units" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_expiry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/field_spacing"
+                android:hint="@string/hint_expiry"
+                app:helperText="@string/helper_expiry"
+                app:startIconContentDescription="@string/cd_pick_date"
+                app:startIconDrawable="@drawable/ic_calendar">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_expiry"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_expiry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/field_spacing"
-                    android:hint="@string/hint_expiry"
-                    app:helperText="@string/helper_expiry"
-                    app:startIconContentDescription="@string/cd_pick_date"
-                    app:startIconDrawable="@drawable/ic_calendar">
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:importantForAutofill="no"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edit_expiry"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:cursorVisible="false"
-                        android:focusable="false"
-                        android:importantForAutofill="no"
-                        android:inputType="none" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_clear_date"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/action_clear_date" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_clear_date"
-                    style="@style/Widget.Pantry.Button.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="@string/action_clear_date" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/field_spacing"
+                android:text="@string/action_save" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_save"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/field_spacing"
-                    android:text="@string/action_save" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_delete"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/button_spacing"
+                android:text="@string/action_delete"
+                android:textColor="?attr/colorError"
+                app:strokeColor="?attr/colorError" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_delete"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_medium"
-                    android:text="@string/action_delete" />
-
-            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

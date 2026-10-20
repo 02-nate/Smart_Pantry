@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lighter tints keep status colours readable on dark surfaces. -->
+    <color name="status_available">#FF81C784</color>
+    <color name="status_missing">#FFEF9A9A</color>
+    <color name="expired_text">#FFEF9A9A</color>
+    <color name="expiring_soon_background">#FF4A3A00</color>
+    <color name="expiring_soon_text">#FFFFD54F</color>
+    <color name="cook_now_background">#FF1F3A38</color>
+    <color name="almost_there_background">#FF3A2440</color>
+</resources>

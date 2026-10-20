@@ -23,10 +23,6 @@ public final class NavHelper {
 
     /** Highlights {@code currentItemId} and starts the matching Activity when another tab is tapped. */
     public static void setup(Activity activity, BottomNavigationView nav, @IdRes int currentItemId) {
-        // Text-only tabs: the menu "icon" is the active dot, drawn in its own colours, and
-        // the Material pill indicator is replaced by that dot.
-        nav.setItemIconTintList(null);
-        nav.setItemActiveIndicatorEnabled(false);
         highlight(nav, currentItemId);
         nav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();

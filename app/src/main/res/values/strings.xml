@@ -1,29 +1,18 @@
 <resources>
     <string name="app_name">Smart Pantry Manager</string>
 
-    <!-- Shared formatting -->
-    <string name="two_digit" translatable="false">%02d</string>
-    <string name="no_value" translatable="false">—</string>
-
     <!-- Pantry list -->
     <string name="title_pantry">My Pantry</string>
-    <string name="display_pantry">The Pantry\nArchive</string>
-    <string name="tile_total_items">Total items</string>
-    <string name="tile_expiring_soon">Expiring soon</string>
-    <string name="section_active_stock">Active stock</string>
-    <string name="section_sorted_by_name">Sorted A–Z</string>
     <string name="action_add_ingredient">Add ingredient</string>
-    <string name="empty_pantry">Your pantry is empty — tap + to add an ingredient.</string>
-    <string name="label_days_left">Days left · %1$s</string>
-    <string name="label_expiring_soon">Expires soon · %1$s</string>
+    <string name="empty_pantry">Your pantry is empty — tap Add ingredient to start.</string>
+    <string name="expiry_on">Expires %1$s</string>
+    <string name="label_expiring_soon">Expires soon</string>
     <string name="label_expired">Expired — not used for suggestions</string>
-    <string name="label_expired_on">Expired %1$s</string>
-    <string name="label_no_expiry">No expiry date</string>
+
 
     <!-- Add / edit ingredient -->
     <string name="title_add_ingredient">Add ingredient</string>
     <string name="title_edit_ingredient">Edit ingredient</string>
-    <string name="display_add_ingredient">New\nEntry</string>
     <string name="hint_name">Name</string>
     <string name="hint_quantity">Quantity</string>
     <string name="hint_unit">Unit</string>
@@ -50,44 +39,33 @@
 
     <!-- Suggested recipes -->
     <string name="title_suggestions">Suggested recipes</string>
-    <string name="display_suggestions">Cook\nTonight</string>
     <string name="header_cook_now">Cook now</string>
-    <string name="header_cook_now_detail">All in your pantry</string>
-    <string name="header_almost_there">Almost there</string>
-    <string name="header_almost_there_detail">Missing 1 ingredient</string>
+    <string name="header_almost_there">Almost there — missing 1 ingredient</string>
     <string name="empty_suggestions">No recipes match your pantry yet — add more ingredients.</string>
-    <string name="label_ingredients">Ingredients</string>
-    <string name="label_all_in_pantry">All in your pantry</string>
-    <string name="label_missing">Missing</string>
+    <string name="missing_ingredient">Missing: %1$s</string>
+    <plurals name="recipe_all_available">
+        <item quantity="one">%1$d ingredient • all in your pantry</item>
+        <item quantity="other">%1$d ingredients • all in your pantry</item>
+    </plurals>
 
     <!-- Recipe detail -->
-    <plurals name="recipe_eyebrow">
-        <item quantity="one">Recipe / %1$d ingredient</item>
-        <item quantity="other">Recipe / %1$d ingredients</item>
-    </plurals>
     <string name="header_ingredients">Ingredients</string>
-    <string name="header_ingredients_detail">In pantry: %1$d / %2$d</string>
     <string name="header_method">Method</string>
-    <plurals name="header_method_detail">
-        <item quantity="one">%1$d step</item>
-        <item quantity="other">%1$d steps</item>
-    </plurals>
     <string name="status_available">✓</string>
     <string name="status_missing">✗</string>
     <string name="cd_status_available">In your pantry</string>
     <string name="cd_status_missing">Missing or not enough</string>
     <string name="ingredient_line">%1$s %2$s</string>
+    <string name="step_line">%1$d. %2$s</string>
     <string name="toast_recipe_not_found">Recipe not found</string>
 
     <!-- Bottom navigation -->
-    <string name="nav_pantry">Stock</string>
-    <string name="nav_suggestions">Recipes</string>
+    <string name="nav_pantry">Pantry</string>
+    <string name="nav_suggestions">Suggestions</string>
     <string name="nav_settings">Settings</string>
 
     <!-- Settings -->
     <string name="title_settings">Settings</string>
-    <string name="display_settings">Your\nPreferences</string>
-    <string name="header_expiry">Expiry</string>
     <string name="setting_highlight_expiring">Highlight expiring items</string>
     <string name="setting_highlight_expiring_summary">Show items that expire within 3 days or have already expired</string>
     <string name="header_display_units">Display units</string>

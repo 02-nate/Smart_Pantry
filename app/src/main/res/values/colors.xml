@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Design tokens from DESIGN.md ("The Pantry Archive"). -->
-    <color name="bg_white">#FFFFFFFF</color>
-    <color name="bg_black">#FF000000</color>
-    <color name="bg_green">#FFE2F1AF</color>
-    <color name="bg_mint">#FFD4F4F1</color>
-    <color name="bg_lavender">#FFF1D4F4</color>
-    <color name="text_main">#FF000000</color>
-    <color name="text_muted">#FF666666</color>
-    <color name="urgent">#FFFF3B30</color>
-    <color name="hairline">#26000000</color>
-    <color name="ripple_subtle">#0D000000</color>
-    <color name="nav_inactive">#66000000</color>
-
-    <!-- Ingredient status on the recipe detail screen. -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="green_primary">#FF2E7D32</color>
+    <color name="amber_secondary">#FFF9A825</color>
     <color name="status_available">#FF2E7D32</color>
-    <color name="status_missing">@color/urgent</color>
+    <color name="status_missing">#FFC62828</color>
+    <color name="expired_text">#FFC62828</color>
+    <color name="expiring_soon_background">#FFFFF3C4</color>
+    <color name="expiring_soon_text">#FF7A5200</color>
+    <!-- Pastel tints from DESIGN.md for the two suggestion lists. -->
+    <color name="cook_now_background">#FFD4F4F1</color>
+    <color name="almost_there_background">#FFF1D4F4</color>
 </resources>

@@ -16,23 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartpantrymanager.R;
 import com.example.smartpantrymanager.matching.RecipeMatcher;
 import com.example.smartpantrymanager.model.PantryItem;
-import com.example.smartpantrymanager.util.CardFills;
 import com.example.smartpantrymanager.util.QuantityFormatter;
 import com.google.android.material.card.MaterialCardView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * RecyclerView adapter for pantry tiles, using the ViewHolder pattern and DiffUtil.
- * Each tile shows the days left until expiry as a large zero-padded numeral. When highlighting
- * is on, items within {@link #EXPIRING_SOON_DAYS} days are labelled "Expires soon", expired
- * items are labelled as unused for suggestions, and the numeral turns red at
- * {@link #URGENT_DAYS} days or fewer.
+ * RecyclerView adapter for pantry rows, using the ViewHolder pattern and DiffUtil.
+ * When highlighting is on, items expiring within {@link #EXPIRING_SOON_DAYS} days get an amber
+ * card and expired items get red text, matching the matcher's rule that expired items are unused.
  */
 public class PantryAdapter extends ListAdapter<PantryItem, PantryAdapter.PantryViewHolder> {
 
@@ -44,9 +39,6 @@ public class PantryAdapter extends ListAdapter<PantryItem, PantryAdapter.PantryV
     /** Items expiring between today and this many days from now count as "expiring soon". */
     public static final int EXPIRING_SOON_DAYS = 3;
 
-    /** At or below this many days left, the days numeral is shown in red. */
-    public static final int URGENT_DAYS = 2;
-
     private static final DateTimeFormatter DISPLAY_DATE =
             DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);
 
@@ -57,14 +49,6 @@ public class PantryAdapter extends ListAdapter<PantryItem, PantryAdapter.PantryV
     public PantryAdapter(OnItemClickListener listener) {
         super(DIFF_CALLBACK);
         this.listener = listener;
-    }
-
-    /**
-     * Shows a new list. Card fills depend on position, so every row is rebound once the
-     * diff is applied; otherwise rows that only moved would keep their old fill.
-     */
-    public void submitItems(List<PantryItem> items) {
-        submitList(items, () -> notifyItemRangeChanged(0, getItemCount()));
     }
 
     /** Switches between g / ml only and auto-scaled kg / L, rebinding rows if it changed. */
@@ -83,13 +67,6 @@ public class PantryAdapter extends ListAdapter<PantryItem, PantryAdapter.PantryV
         }
     }
 
-    /** Returns true when the item has not expired but expires within {@link #EXPIRING_SOON_DAYS}. */
-    public static boolean isExpiringSoon(PantryItem item, LocalDate today) {
-        LocalDate expiry = RecipeMatcher.parseDate(item.getExpiryDate());
-        return expiry != null && !expiry.isBefore(today)
-                && !expiry.isAfter(today.plusDays(EXPIRING_SOON_DAYS));
-    }
-
     @NonNull
     @Override
     public PantryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -103,63 +80,69 @@ public class PantryAdapter extends ListAdapter<PantryItem, PantryAdapter.PantryV
         PantryItem item = getItem(position);
         Context context = holder.itemView.getContext();
 
-        CardFills.apply(holder.card, position);
         holder.name.setText(item.getName());
         holder.quantity.setText(
                 QuantityFormatter.format(item.getQuantity(), item.getUnit(), autoScaleUnits));
-        // Rows are recycled, so the urgent colour is reset before it is (maybe) reapplied.
-        holder.days.setTextColor(holder.defaultDaysColor);
+
+        // Rows are recycled, so every highlight is reset before it is (maybe) reapplied.
+        holder.resetHighlight();
 
         LocalDate expiry = RecipeMatcher.parseDate(item.getExpiryDate());
         if (expiry == null) {
-            holder.days.setText(R.string.no_value);
-            holder.expiryLabel.setText(R.string.label_no_expiry);
+            holder.expiry.setVisibility(View.GONE);
         } else {
-            bindExpiry(holder, context, expiry, LocalDate.now());
+            holder.expiry.setVisibility(View.VISIBLE);
+            holder.expiry.setText(context.getString(R.string.expiry_on, DISPLAY_DATE.format(expiry)));
+            if (highlightExpiring) {
+                applyHighlight(holder, context, expiry, LocalDate.now());
+            }
         }
 
         holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
     }
 
-    private void bindExpiry(PantryViewHolder holder, Context context,
-                            LocalDate expiry, LocalDate today) {
-        long daysLeft = Math.max(0, ChronoUnit.DAYS.between(today, expiry));
-        String date = DISPLAY_DATE.format(expiry);
-        holder.days.setText(context.getString(R.string.two_digit, daysLeft));
-
-        boolean expired = expiry.isBefore(today);
-        if (expired) {
-            holder.expiryLabel.setText(highlightExpiring
-                    ? context.getString(R.string.label_expired)
-                    : context.getString(R.string.label_expired_on, date));
-        } else if (highlightExpiring && daysLeft <= EXPIRING_SOON_DAYS) {
-            holder.expiryLabel.setText(context.getString(R.string.label_expiring_soon, date));
-        } else {
-            holder.expiryLabel.setText(context.getString(R.string.label_days_left, date));
-        }
-
-        if (highlightExpiring && daysLeft <= URGENT_DAYS) {
-            holder.days.setTextColor(ContextCompat.getColor(context, R.color.urgent));
+    private static void applyHighlight(PantryViewHolder holder, Context context,
+                                       LocalDate expiry, LocalDate today) {
+        if (expiry.isBefore(today)) {
+            int red = ContextCompat.getColor(context, R.color.expired_text);
+            holder.expiry.setTextColor(red);
+            holder.status.setTextColor(red);
+            holder.status.setText(R.string.label_expired);
+            holder.status.setVisibility(View.VISIBLE);
+        } else if (!expiry.isAfter(today.plusDays(EXPIRING_SOON_DAYS))) {
+            holder.card.setCardBackgroundColor(
+                    ContextCompat.getColor(context, R.color.expiring_soon_background));
+            holder.status.setTextColor(ContextCompat.getColor(context, R.color.expiring_soon_text));
+            holder.status.setText(R.string.label_expiring_soon);
+            holder.status.setVisibility(View.VISIBLE);
         }
     }
 
-    /** Holds the views of one pantry tile so they are looked up only once. */
+    /** Holds the views of one pantry row so they are looked up only once. */
     static class PantryViewHolder extends RecyclerView.ViewHolder {
         final MaterialCardView card;
         final TextView name;
-        final TextView days;
-        final TextView expiryLabel;
         final TextView quantity;
-        final ColorStateList defaultDaysColor;
+        final TextView expiry;
+        final TextView status;
+        private final ColorStateList defaultCardColor;
+        private final ColorStateList defaultExpiryColor;
 
         PantryViewHolder(@NonNull View itemView) {
             super(itemView);
             card = (MaterialCardView) itemView;
             name = itemView.findViewById(R.id.text_name);
-            days = itemView.findViewById(R.id.text_days);
-            expiryLabel = itemView.findViewById(R.id.text_expiry_label);
             quantity = itemView.findViewById(R.id.text_quantity);
-            defaultDaysColor = days.getTextColors();
+            expiry = itemView.findViewById(R.id.text_expiry);
+            status = itemView.findViewById(R.id.text_expiry_status);
+            defaultCardColor = card.getCardBackgroundColor();
+            defaultExpiryColor = expiry.getTextColors();
+        }
+
+        void resetHighlight() {
+            card.setCardBackgroundColor(defaultCardColor);
+            expiry.setTextColor(defaultExpiryColor);
+            status.setVisibility(View.GONE);
         }
     }
 

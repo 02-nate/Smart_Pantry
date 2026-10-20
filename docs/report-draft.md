@@ -85,7 +85,7 @@ On first run, `onCreate` seeds the 20 recipes and a demo pantry in a single tran
 *Figure 1: The pantry list on first launch. The demo pantry is inserted when the database is created, so the items are sorted alphabetically with quantities formatted using auto-scale (for example 2 kg, 1 L).*
 
 [SCREENSHOT: Pantry list — empty state after Settings → Clear pantry]
-*Figure 2: The empty-state message, reached through Settings → Clear pantry, which guides the user to the + (Add ingredient) button. The demo data only returns after the app is reinstalled or its storage is cleared, so take this screenshot last.*
+*Figure 2: The empty-state message, reached through Settings → Clear pantry, which guides the user to the "Add ingredient" button. The demo data only returns after the app is reinstalled or its storage is cleared, so take this screenshot last.*
 
 [SCREENSHOT: Add Ingredient form — empty]
 *Figure 3: The Add Ingredient form with name, quantity, unit dropdown and optional expiry date.*
@@ -121,13 +121,16 @@ On first run, `onCreate` seeds the 20 recipes and a demo pantry in a single tran
 *Figure 13: Recipe detail showing which ingredients are in the pantry (✓) and which are missing (✗), followed by the numbered method.*
 
 [SCREENSHOT: Settings screen]
-*Figure 14: Settings with the highlight switch, the display-units choice, the "Clear pantry" button and the About line.*
+*Figure 14: Settings with the highlight switch, the display-units choice, the "Clear pantry" button, and the About line.*
 
 [SCREENSHOT: Clear pantry confirmation dialog]
 *Figure 15: Confirmation before every pantry item is removed.*
 
-[SCREENSHOT: Expiry highlighting — "Expires soon" with a red days-left number, and "Expired"]
-*Figure 16: Expiry highlighting on the pantry tiles. The days-left number turns red at 2 days or fewer, items within 3 days are labelled "Expires soon", and expired items are labelled as not used for suggestions.*
+[SCREENSHOT: Expiry highlighting — "Expires soon" (amber) and "Expired" (red)]
+*Figure 16: Expiry highlighting on the pantry list. Expired items are labelled as not used for suggestions.*
+
+[SCREENSHOT: Dark theme (optional)]
+*Figure 17: The same screen in dark mode.*
 
 ---
 
@@ -201,19 +204,22 @@ public void onBindViewHolder(@NonNull PantryViewHolder holder, int position) {
     PantryItem item = getItem(position);
     Context context = holder.itemView.getContext();
 
-    CardFills.apply(holder.card, position);
     holder.name.setText(item.getName());
     holder.quantity.setText(
             QuantityFormatter.format(item.getQuantity(), item.getUnit(), autoScaleUnits));
-    // Rows are recycled, so the urgent colour is reset before it is (maybe) reapplied.
-    holder.days.setTextColor(holder.defaultDaysColor);
+
+    // Rows are recycled, so every highlight is reset before it is (maybe) reapplied.
+    holder.resetHighlight();
 
     LocalDate expiry = RecipeMatcher.parseDate(item.getExpiryDate());
     if (expiry == null) {
-        holder.days.setText(R.string.no_value);
-        holder.expiryLabel.setText(R.string.label_no_expiry);
+        holder.expiry.setVisibility(View.GONE);
     } else {
-        bindExpiry(holder, context, expiry, LocalDate.now());
+        holder.expiry.setVisibility(View.VISIBLE);
+        holder.expiry.setText(context.getString(R.string.expiry_on, DISPLAY_DATE.format(expiry)));
+        if (highlightExpiring) {
+            applyHighlight(holder, context, expiry, LocalDate.now());
+        }
     }
 
     holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
@@ -230,7 +236,7 @@ private void openEditor(long itemId) {
 }
 ```
 
-The adapter uses the ViewHolder pattern, so `findViewById` runs once per row view rather than on every scroll. Each tile's fill colour comes from its position, so neighbouring tiles never share a colour. Because RecyclerView reuses row views, the red "urgent" colour left over from a previous item is reset before the new item is bound. A tap is passed to the Activity through the adapter's `OnItemClickListener` interface. The Activity then builds an explicit Intent carrying the item's id as `EXTRA_ITEM_ID`, which puts the Add/Edit screen into edit mode.
+The adapter uses the ViewHolder pattern, so `findViewById` runs once per row view rather than on every scroll. Because RecyclerView reuses row views, any highlight left over from a previous item is reset before the new item is bound. A tap is passed to the Activity through the adapter's `OnItemClickListener` interface. The Activity then builds an explicit Intent carrying the item's id as `EXTRA_ITEM_ID`, which puts the Add/Edit screen into edit mode.
 
 ---
 

@@ -15,23 +15,17 @@ import com.example.smartpantrymanager.util.NavHelper;
 import com.example.smartpantrymanager.util.Prefs;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Launcher screen: masthead, summary tiles (total and expiring-soon counts), the pantry
- * tiles, an empty state and an add button.
- */
+/** Launcher screen listing every pantry item, with an empty state and an add button. */
 public class PantryListActivity extends AppCompatActivity {
 
     private DatabaseHelper db;
     private PantryAdapter adapter;
     private RecyclerView recycler;
     private TextView emptyText;
-    private TextView totalValue;
-    private TextView expiringValue;
     private BottomNavigationView bottomNav;
 
     @Override
@@ -45,12 +39,7 @@ public class PantryListActivity extends AppCompatActivity {
         db = DatabaseHelper.getInstance(this);
         recycler = findViewById(R.id.recycler_pantry);
         emptyText = findViewById(R.id.text_empty);
-        FloatingActionButton fab = findViewById(R.id.fab_add);
-
-        ((TextView) findViewById(R.id.tile_left_label)).setText(R.string.tile_total_items);
-        ((TextView) findViewById(R.id.tile_right_label)).setText(R.string.tile_expiring_soon);
-        totalValue = findViewById(R.id.tile_left_value);
-        expiringValue = findViewById(R.id.tile_right_value);
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab_add);
 
         adapter = new PantryAdapter(item -> openEditor(item.getId()));
         recycler.setAdapter(adapter);
@@ -58,6 +47,18 @@ public class PantryListActivity extends AppCompatActivity {
 
         bottomNav = findViewById(R.id.bottom_nav);
         NavHelper.setup(this, bottomNav, R.id.nav_pantry);
+
+        // Collapse the FAB to an icon while scrolling down so it does not hide rows.
+        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView rv, int dx, int dy) {
+                if (dy > 0) {
+                    fab.shrink();
+                } else if (dy < 0) {
+                    fab.extend();
+                }
+            }
+        });
     }
 
     @Override
@@ -72,21 +73,10 @@ public class PantryListActivity extends AppCompatActivity {
         adapter.setAutoScaleUnits(Prefs.isAutoScaleUnits(this));
         adapter.setHighlightExpiring(Prefs.isHighlightExpiring(this));
         List<PantryItem> items = db.getAllPantryItems();
-        adapter.submitItems(items);
-
-        LocalDate today = LocalDate.now();
-        int expiringSoon = 0;
-        for (PantryItem item : items) {
-            if (PantryAdapter.isExpiringSoon(item, today)) {
-                expiringSoon++;
-            }
-        }
-        totalValue.setText(getString(R.string.two_digit, items.size()));
-        expiringValue.setText(getString(R.string.two_digit, expiringSoon));
-
+        adapter.submitList(items);
         boolean empty = items.isEmpty();
         emptyText.setVisibility(empty ? View.VISIBLE : View.GONE);
-        recycler.setVisibility(empty ? View.GONE : View.VISIBLE);
+        recycler.setVisibility(empty ? View.INVISIBLE : View.VISIBLE);
     }
 
     /** Opens the add/edit form; a negative id opens it in add mode. */
