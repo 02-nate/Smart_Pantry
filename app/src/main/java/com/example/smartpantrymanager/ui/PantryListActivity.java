@@ -71,6 +71,7 @@ public class PantryListActivity extends AppCompatActivity {
     private void loadPantry() {
         // Settings may have changed while this screen was in the background.
         adapter.setAutoScaleUnits(Prefs.isAutoScaleUnits(this));
+        adapter.setHighlightExpiring(Prefs.isHighlightExpiring(this));
         List<PantryItem> items = db.getAllPantryItems();
         adapter.submitList(items);
         boolean empty = items.isEmpty();

@@ -49,7 +49,9 @@ public final class QuantityFormatter {
 
     /** Formats a number with at most two decimals and no trailing zeros, e.g. 2, 1.5, 0.25. */
     public static String formatNumber(double value) {
-        DecimalFormat format = new DecimalFormat("0.##", DecimalFormatSymbols.getInstance(Locale.getDefault()));
+        // DecimalFormat is not thread-safe, so a new instance is created per call.
+        DecimalFormat format = new DecimalFormat("0.##",
+                DecimalFormatSymbols.getInstance(Locale.getDefault()));
         return format.format(value);
     }
 }

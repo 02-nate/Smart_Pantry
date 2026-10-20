@@ -6,6 +6,8 @@
     <string name="action_add_ingredient">Add ingredient</string>
     <string name="empty_pantry">Your pantry is empty — tap Add ingredient to start.</string>
     <string name="expiry_on">Expires %1$s</string>
+    <string name="label_expiring_soon">Expires soon</string>
+    <string name="label_expired">Expired — not used for suggestions</string>
 
 
     <!-- Add / edit ingredient -->
@@ -26,7 +28,7 @@
     <string name="toast_save_failed">Could not save the ingredient</string>
     <string name="toast_item_not_found">That ingredient no longer exists</string>
     <string name="error_name_required">Enter a name</string>
-    <string name="error_name_length">Name must be %1$d–%2$d characters</string>
+    <string name="error_name_length">Name length must be between %1$d and %2$d</string>
     <string name="error_name_chars">Use letters, spaces and hyphens only</string>
     <string name="error_quantity_required">Enter a quantity</string>
     <string name="error_quantity_invalid">Enter a number, for example 2 or 0.5</string>

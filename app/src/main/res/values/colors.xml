@@ -6,4 +6,7 @@
     <color name="amber_secondary">#FFF9A825</color>
     <color name="status_available">#FF2E7D32</color>
     <color name="status_missing">#FFC62828</color>
+    <color name="expired_text">#FFC62828</color>
+    <color name="expiring_soon_background">#FFFFF3C4</color>
+    <color name="expiring_soon_text">#FF7A5200</color>
 </resources>
