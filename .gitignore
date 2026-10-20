@@ -12,3 +12,7 @@ captures/
 *.iml
 local.properties
 .DS_Store
+
+# Submission files (kept out of the repository)
+submission/
+screenshots/
