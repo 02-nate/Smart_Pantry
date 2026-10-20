@@ -86,7 +86,7 @@ CREATE TABLE recipe_ingredients (
 
 **Setup**
 - Enable foreign keys in `onConfigure` with `db.setForeignKeyConstraintsEnabled(true)`.
-- `onCreate` creates the tables, then calls `RecipeSeeder.seed(db)` inside one transaction.
+- `onCreate` creates the tables, calls `RecipeSeeder.seed(db)`, then inserts `RecipeSeeder.demoPantry()`, all inside one transaction. Because `onCreate` only runs when the database file is first created, the demo pantry is pre-loaded on first run only and never overwrites later user edits.
 - `onUpgrade` drops and recreates the tables.
 - Use a thread-safe singleton: `getInstance(Context)` using the application context.
 - Use table and column name constants. Always use parameterised queries (`?` args), never string concatenation. Close every Cursor in a try-with-resources or finally block.
@@ -109,7 +109,7 @@ CREATE TABLE recipe_ingredients (
 Apply these steps in order:
 1. Convert to lowercase and trim.
 2. Replace every character that is not a letter or a space with a space, then collapse repeated whitespace.
-3. **Singularise the last word only**, using these rules in order:
+3. **Singularise the last word only**. First look the word up in an **irregular-plurals map** (cheeses→cheese, leaves→leaf, loaves→loaf, knives→knife, and molasses, hummus and couscous unchanged). If it is not there, apply these rules in order:
    - `ies` → `y`
    - `oes` → `o`
    - ends in `ses`, `xes`, `ches` or `shes` → strip `es`
@@ -177,7 +177,7 @@ The method returns `MatchResults` holding two lists: `strict` and `almostThere`.
    - COUNT is only compared with COUNT.
    - MASS and VOLUME are treated as interchangeable using the documented approximation **1 g ≈ 1 ml**. For a MASS or VOLUME requirement, the available amount is `mass + volume` for that name.
    - Document this in the class Javadoc as a deliberate simplification.
-3. **Always-available staples.** A small constant set, `{"water"}`, is always treated as available. Document why: tap water is not tracked as a pantry item.
+3. **No exceptions.** Every listed ingredient must be in the pantry; nothing is treated as always available. Tap water is not tracked, so recipes mention water in their method steps rather than their ingredient lists.
 4. **Check each recipe.** For each recipe ingredient, compute the required amount in base units. It counts as **missing** if `available + 1e-6 < required`, which covers both "absent" and "not enough".
 5. **Classify each recipe.**
    - A recipe with 0 missing ingredients goes into `strict`.
@@ -196,6 +196,7 @@ All of the following must pass.
 - "mealie meal"→"maize meal"
 - "Sunflower Oil"→"oil"
 - hummus unchanged
+- cheeses→cheese, "Bay Leaves"→"bay leaf" (irregular plurals)
 - KG parses with factor 1000
 - "tbsp" parses as VOLUME 15
 - unknown unit throws
@@ -210,7 +211,7 @@ All of the following must pass.
 7. Two pantry rows of 250 g sum to satisfy 500 g.
 8. An expired item is ignored.
 9. A PCS requirement is not satisfied by a gram quantity of the same name.
-10. Water is never required in the pantry.
+10. Every recipe ingredient must be present, with no exceptions (a recipe listing water is not strict when the pantry has no water).
 11. A recipe with an empty ingredient list is never suggested.
 
 ## Screens
@@ -309,13 +310,12 @@ The theme is Material 3 DayNight, with `colorPrimary` #2E7D32 (green) and `color
   - **Auto-scale** (kg / L): shows kg or L when the amount is 1000 g or 1000 ml or more. This is the default.
 
 **Buttons**
-- **"Load demo pantry":** inserts the demo pantry below. Ask for confirmation first.
-- **"Clear pantry":** asks for confirmation with a `MaterialAlertDialog`, then calls `clearPantry()`.
+- **"Clear pantry":** asks for confirmation with a `MaterialAlertDialog`, then calls `clearPantry()`. There is no button to load or reset the demo pantry; it is pre-loaded on first run only (see `DatabaseHelper.onCreate`), and coming back to it requires reinstalling the app or clearing its storage.
 
 **Footer**
 - An "About" line with the app name and version.
 
-**Demo pantry** (chosen so that Chakalaka, Pap and Tomato Gravy, and Egg and Tomato Scramble match strictly, while several others are "almost there"):
+**Demo pantry** (defined in `RecipeSeeder.demoPantry()`, pre-loaded on first run, and chosen so that Chakalaka, Pap and Tomato Gravy, and Egg and Tomato Scramble match strictly, while several others are "almost there"):
 - onion 3 pcs
 - tomatoes 5 pcs
 - carrots 2 pcs
@@ -337,22 +337,24 @@ The theme is Material 3 DayNight, with `colorPrimary` #2E7D32 (green) and `color
 
 **Steps.** Write 3–5 short, practical preparation steps per recipe, joined with `\n`.
 
+**Water is not an ingredient.** Where a recipe needs water, state the amount in its steps (for example "Bring 1 litre of salted water to the boil…"), not in the ingredient list.
+
 | # | Recipe | Ingredients |
 |---|---|---|
 | 1 | Chakalaka | onion 1 pcs; tomato 2 pcs; carrot 2 pcs; green pepper 1 pcs; baked beans 410 g; curry powder 10 g; oil 30 ml |
-| 2 | Pap and Tomato Gravy | maize meal 500 g; water 1000 ml; salt 5 g; tomato 3 pcs; onion 1 pcs; oil 30 ml |
-| 3 | Vetkoek | cake flour 500 g; instant yeast 10 g; sugar 15 g; salt 5 g; water 350 ml; oil 500 ml |
+| 2 | Pap and Tomato Gravy | maize meal 500 g; salt 5 g; tomato 3 pcs; onion 1 pcs; oil 30 ml |
+| 3 | Vetkoek | cake flour 500 g; instant yeast 10 g; sugar 15 g; salt 5 g; oil 500 ml |
 | 4 | Bobotie | beef mince 500 g; onion 1 pcs; bread slice 2 pcs; milk 250 ml; egg 2 pcs; curry powder 15 g; chutney 30 ml |
-| 5 | Samp and Beans | samp 500 g; sugar beans 250 g; onion 1 pcs; salt 5 g; water 2000 ml |
+| 5 | Samp and Beans | samp 500 g; sugar beans 250 g; onion 1 pcs; salt 5 g |
 | 6 | Egg and Tomato Scramble | egg 4 pcs; tomato 2 pcs; onion 1 pcs; oil 15 ml; salt 2 g |
-| 7 | Morogo and Pap | spinach 300 g; onion 1 pcs; tomato 1 pcs; maize meal 300 g; water 750 ml; oil 15 ml |
+| 7 | Morogo and Pap | spinach 300 g; onion 1 pcs; tomato 1 pcs; maize meal 300 g; oil 15 ml |
 | 8 | Boerewors Rolls | boerewors 500 g; bread roll 4 pcs; onion 1 pcs; tomato sauce 60 ml |
 | 9 | Chicken Curry | chicken 1000 g; onion 1 pcs; tomato 2 pcs; potato 3 pcs; curry powder 20 g; garlic 3 pcs; oil 30 ml |
 | 10 | Potato Salad | potato 6 pcs; egg 3 pcs; mayonnaise 125 ml; onion 1 pcs |
 | 11 | Pumpkin Fritters | pumpkin 500 g; cake flour 120 g; egg 2 pcs; sugar 15 g; cinnamon 5 g; oil 100 ml |
 | 12 | French Toast | bread slice 4 pcs; egg 2 pcs; milk 125 ml; sugar 10 g; oil 30 ml |
 | 13 | Spaghetti Bolognese | spaghetti 500 g; beef mince 500 g; onion 1 pcs; tomato 4 pcs; garlic 2 pcs |
-| 14 | Vegetable Soup | potato 2 pcs; carrot 3 pcs; onion 1 pcs; cabbage 300 g; water 1500 ml; salt 5 g |
+| 14 | Vegetable Soup | potato 2 pcs; carrot 3 pcs; onion 1 pcs; cabbage 300 g; salt 5 g |
 | 15 | Fried Cabbage | cabbage 500 g; onion 1 pcs; oil 30 ml; salt 3 g |
 | 16 | Tuna Mayo Rice | rice 250 g; tuna 170 g; onion 1 pcs; mayonnaise 60 ml |
 | 17 | Flapjacks | cake flour 250 g; milk 250 ml; egg 2 pcs; sugar 30 g; baking powder 10 g; oil 15 ml |
@@ -414,7 +416,7 @@ The README needs these sections:
    - fits a single-user pantry
    - matches the module's persistent-data content
    - data persists across app restarts
-4. **How matching works:** a short paragraph covering normalisation, unit conversion, the 1 g ≈ 1 ml approximation, water as a staple, and expired items being excluded.
+4. **How matching works:** a short paragraph covering normalisation, unit conversion, the 1 g ≈ 1 ml approximation, the no-exceptions rule (water is not an ingredient), irregular plurals, and expired items being excluded.
 5. **Setup and run:**
    - Android Studio version, plus JDK 17 and the Android SDK
    - clone, open, sync Gradle, and run on an emulator or device (state the min SDK)
@@ -450,11 +452,12 @@ The README needs these sections:
 - **`docs/video-script.md`:** a timed 6-minute narration outline:
   - **0:00–1:00** — GitHub commit history.
   - **1:00–3:30** — demo, in this order:
-    1. Load demo pantry and show the suggestions.
+    1. Show the pre-loaded demo pantry and the suggestions.
     2. Delete carrots and show Chakalaka move to Almost There.
     3. Add carrots back and show it return.
     4. Edit a quantity below the required amount and show the recipe disappear.
     5. Trigger a validation error.
     6. Close the app fully and reopen it to show the data persisted.
+    7. Last: Settings → Clear pantry to show the empty states (the demo pantry cannot be restored without reinstalling).
   - **3:30–5:30** — explain three concepts, each with the exact file and method to point at: the Adapter, Intents, and the matching algorithm.
   - **5:30–6:15** — justify the database choice.

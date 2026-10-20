@@ -71,11 +71,17 @@ On first run, `onCreate` seeds the 20 recipes and a demo pantry in a single tran
 
 ### 4.4 Matching algorithm
 
-1. Normalise names: lower-case, strip punctuation, singularise the last word, then apply the alias map.
+1. Normalise names: lower-case, strip punctuation, singularise the last word (irregular plurals such as "cheeses" → "cheese" and "leaves" → "leaf" are looked up first, then suffix rules apply), then apply the alias map.
 2. Convert every quantity to a base unit (g, ml or pcs) and sum duplicate pantry rows. Expired items are skipped.
 3. Treat mass and volume as interchangeable (1 g ≈ 1 ml); compare count only with count.
-4. Treat water as always available.
+4. Apply no exceptions: every listed ingredient must be in the pantry. Water is not listed as an ingredient; the recipes give the water amount in their method steps instead.
 5. For each recipe, count the ingredients that are missing or insufficient: 0 → "Cook now", 1 → "Almost there", 2 or more → not shown.
+
+### 4.5 Design decisions
+
+- **1 g ≈ 1 ml.** Mass and volume are treated as interchangeable, so "500 ml milk" in the pantry satisfies "500 g milk" in a recipe. Real densities differ per ingredient, but storing a density for every ingredient would add a lot of data for little benefit in a household app. Counted items (pcs) are never converted, because there is no reliable way to turn "3 onions" into grams.
+- **No special cases in strict matching.** Every listed ingredient is required, so the "4 of 5 ingredients is not enough" rule holds without exceptions. Water, which users do not track, is described in the method steps rather than listed as an ingredient.
+- **Demo pantry on first run.** The database seeds a demo pantry when it is created, so the suggestions are visible straight away. It is never re-inserted, so user edits are kept.
 
 ---
 
@@ -160,7 +166,7 @@ public static String normalizeName(String raw) {
 }
 ```
 
-The pantry stores names exactly as the user typed them, so "Tomatoes", "tomato" and " TOMATO " must all be compared as the same ingredient. This method lower-cases the name, removes non-letters, singularises only the last word (so "bread rolls" becomes "bread roll" but "baked beans" keeps its first word), and then applies an alias map so that regional names such as "mealie meal" match the recipe's "maize meal". The same method runs on both the pantry and the recipe side, which keeps comparisons consistent.
+The pantry stores names exactly as the user typed them, so "Tomatoes", "tomato" and " TOMATO " must all be compared as the same ingredient. This method lower-cases the name, removes non-letters, singularises only the last word (so "bread rolls" becomes "bread roll" but "baked beans" keeps its first word; `singularize` checks a small irregular-plurals map such as "cheeses" → "cheese" before its suffix rules), and then applies an alias map so that regional names such as "mealie meal" match the recipe's "maize meal". The same method runs on both the pantry and the recipe side, which keeps comparisons consistent.
 
 ### 6.2 Matching core loop — `RecipeMatcher.match`
 
@@ -183,7 +189,7 @@ for (Recipe recipe : recipes) {
 }
 ```
 
-`stock` holds the non-expired pantry totals per normalised name, already converted to base units. `covers` returns true when the available amount plus a small tolerance (1e-6) is at least the required amount, or when the ingredient is a staple (water). Recipes with no missing ingredients are strict matches. Recipes with exactly one are "Almost there". Empty recipes are skipped, so they are never suggested. Both lists are then sorted by name.
+`stock` holds the non-expired pantry totals per normalised name, already converted to base units. `covers` returns true when the available amount plus a small tolerance (1e-6) is at least the required amount; there are no exceptions. Recipes with no missing ingredients are strict matches. Recipes with exactly one are "Almost there". Empty recipes are skipped, so they are never suggested. Both lists are then sorted by name.
 
 ### 6.3 Updating a row — `DatabaseHelper.updatePantryItem`
 
@@ -265,7 +271,11 @@ The adapter uses the ViewHolder pattern, so `findViewById` runs once per row vie
 
 [STUDENT: reflect on what you learned, for example about RecyclerView adapters, Intents, the Activity lifecycle and SQLite.]
 
-[STUDENT: describe what you would improve with more time. Possible ideas: per-ingredient densities instead of 1 g ≈ 1 ml, a shopping list built from "Almost there", or deducting ingredients after cooking.]
+**What I would improve**
+
+- **Move database work off the main thread.** All queries and writes currently run on the UI thread, in `onResume()` and in `AddEditIngredientActivity.save()`. That is fine for a small pantry, but a larger data set could make the UI stutter. I would run them on a background `Executor` and post the results back to the UI thread.
+- **Replace the destructive `onUpgrade()`.** `DatabaseHelper.onUpgrade()` drops and recreates every table, which is acceptable at version 1 but would erase the user's pantry on any future schema change. I would write step-by-step migrations (for example `ALTER TABLE`) that keep existing data.
+- [STUDENT: add your own ideas. Possible ideas: per-ingredient densities instead of 1 g ≈ 1 ml, a shopping list built from "Almost there", or deducting ingredients after cooking.]
 
 ---
 

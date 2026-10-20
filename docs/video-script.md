@@ -50,9 +50,9 @@
 - Mention `onResume()` reloading the lists after returning from another screen (the Activity lifecycle).
 
 ### Matching algorithm (≈ 0:40)
-- File: `matching/IngredientNormalizer.java`, method `normalizeName`: lower-case, singularise, alias map.
+- File: `matching/IngredientNormalizer.java`, method `normalizeName`: lower-case, singularise (irregular plurals such as "cheeses" first, then suffix rules), alias map.
 - File: `matching/RecipeMatcher.java`, methods `buildStock` (base units, summing duplicates, skipping expired items) and `match` (counting missing ingredients: 0 → strict, 1 → almost there).
-- Mention the 1 g ≈ 1 ml simplification and water as a staple.
+- Mention the 1 g ≈ 1 ml simplification, and that there are no exceptions: water is not an ingredient, so recipes mention it in their method instead.
 - Briefly show `RecipeMatcherTest` passing in Android Studio.
 
 ## 5:30–6:15 — Database choice
