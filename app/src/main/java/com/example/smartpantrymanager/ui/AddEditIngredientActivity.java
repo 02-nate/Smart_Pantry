@@ -123,6 +123,14 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // The view restores its text after onCreate, which also filters the dropdown down to
+        // the matching option. Re-setting it without filtering keeps every unit selectable.
+        unitInput.setText(textOf(unitInput.getText()), false);
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;
