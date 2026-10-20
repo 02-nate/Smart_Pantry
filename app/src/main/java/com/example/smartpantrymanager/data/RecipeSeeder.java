@@ -51,22 +51,22 @@ public final class RecipeSeeder {
                 ing("curry powder", 10, G), ing("oil", 30, ML)));
 
         recipes.add(recipe("Pap and Tomato Gravy", steps(
-                        "Bring the salted water to the boil in a heavy pot.",
+                        "Bring 1 litre of salted water to the boil in a heavy pot.",
                         "Stir in the maize meal, cover and cook on low heat for 25 minutes, stirring now and then.",
                         "Meanwhile fry the chopped onion in oil until golden.",
                         "Add the chopped tomatoes and simmer until they form a thick gravy.",
                         "Serve the pap topped with the tomato gravy."),
-                ing("maize meal", 500, G), ing("water", 1000, ML), ing("salt", 5, G),
+                ing("maize meal", 500, G), ing("salt", 5, G),
                 ing("tomato", 3, PCS), ing("onion", 1, PCS), ing("oil", 30, ML)));
 
         recipes.add(recipe("Vetkoek", steps(
                         "Mix the flour, yeast, sugar and salt in a large bowl.",
-                        "Add the lukewarm water and knead into a soft dough.",
+                        "Add 350 ml of lukewarm water and knead into a soft dough.",
                         "Cover and leave to rise in a warm place for one hour.",
                         "Shape into balls and deep-fry in hot oil until golden on both sides.",
                         "Drain on paper towel and serve with mince or jam."),
                 ing("cake flour", 500, G), ing("instant yeast", 10, G), ing("sugar", 15, G),
-                ing("salt", 5, G), ing("water", 350, ML), ing("oil", 500, ML)));
+                ing("salt", 5, G), ing("oil", 500, ML)));
 
         recipes.add(recipe("Bobotie", steps(
                         "Soak the bread in the milk, then squeeze it out and keep the milk.",
@@ -80,11 +80,11 @@ public final class RecipeSeeder {
 
         recipes.add(recipe("Samp and Beans", steps(
                         "Soak the samp and sugar beans overnight, then drain.",
-                        "Cover with the water and simmer for about 2 hours until soft.",
+                        "Cover with 2 litres of water and simmer for about 2 hours until soft.",
                         "Fry the chopped onion and stir it into the pot.",
                         "Season with salt and cook until thick and creamy."),
                 ing("samp", 500, G), ing("sugar beans", 250, G), ing("onion", 1, PCS),
-                ing("salt", 5, G), ing("water", 2000, ML)));
+                ing("salt", 5, G)));
 
         recipes.add(recipe("Egg and Tomato Scramble", steps(
                         "Fry the chopped onion in oil until soft.",
@@ -95,13 +95,13 @@ public final class RecipeSeeder {
                 ing("oil", 15, ML), ing("salt", 2, G)));
 
         recipes.add(recipe("Morogo and Pap", steps(
-                        "Cook the maize meal in the boiling water for 25 minutes to make pap.",
+                        "Bring 750 ml of water to the boil, stir in the maize meal and cook for 25 minutes to make pap.",
                         "Fry the chopped onion in oil until soft.",
                         "Add the chopped tomato and cook until soft.",
                         "Add the washed spinach and cook until wilted.",
                         "Serve the morogo with the pap."),
                 ing("spinach", 300, G), ing("onion", 1, PCS), ing("tomato", 1, PCS),
-                ing("maize meal", 300, G), ing("water", 750, ML), ing("oil", 15, ML)));
+                ing("maize meal", 300, G), ing("oil", 15, ML)));
 
         recipes.add(recipe("Boerewors Rolls", steps(
                         "Grill or pan-fry the boerewors until cooked through.",
@@ -155,11 +155,11 @@ public final class RecipeSeeder {
 
         recipes.add(recipe("Vegetable Soup", steps(
                         "Chop the potatoes, carrots, onion and cabbage.",
-                        "Place in a large pot with the water and salt.",
+                        "Place in a large pot with 1.5 litres of water and the salt.",
                         "Bring to the boil, then simmer for 30 minutes.",
                         "Blend partly for a thicker soup, or serve chunky."),
                 ing("potato", 2, PCS), ing("carrot", 3, PCS), ing("onion", 1, PCS),
-                ing("cabbage", 300, G), ing("water", 1500, ML), ing("salt", 5, G)));
+                ing("cabbage", 300, G), ing("salt", 5, G)));
 
         recipes.add(recipe("Fried Cabbage", steps(
                         "Slice the cabbage and onion thinly.",

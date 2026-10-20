@@ -159,13 +159,17 @@ public class RecipeMatcherTest {
     }
 
     @Test
-    public void water_isNeverRequired() {
+    public void everyIngredient_isRequired_withNoExceptions() {
+        // Water was once treated as always available; now every listed ingredient counts.
         Recipe r = recipe("Pap", ing("maize meal", 500, "g"), ing("water", 1000, "ml"));
 
         RecipeMatcher.MatchResults results =
                 run(Collections.singletonList(item("maize meal", 500, "g")), r);
 
-        assertTrue(contains(results.getStrict(), "Pap"));
+        assertFalse(contains(results.getStrict(), "Pap"));
+        assertTrue(contains(results.getAlmostThere(), "Pap"));
+        assertEquals(Collections.singletonList("water"),
+                results.getAlmostThere().get(0).getMissing());
     }
 
     @Test

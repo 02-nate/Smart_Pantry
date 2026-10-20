@@ -13,20 +13,20 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Matches recipes against the pantry using a strict rule: a recipe is suggested only when
  * every ingredient is present in at least the required quantity. Recipes missing exactly one
  * ingredient are reported separately in an "Almost There" list.
  *
+ * <p>There are no exceptions: every listed ingredient must be in the pantry. Tap water is not
+ * tracked, so the seed recipes mention water in their method rather than their ingredients.
+ *
  * <p>Deliberate simplifications:
  * <ul>
  *   <li>Mass and volume are treated as interchangeable using <b>1 g &asymp; 1 ml</b>. Densities
  *       differ per ingredient, but this keeps "500 ml milk" and "500 g milk" comparable without
  *       a per-ingredient density table. Count units are only ever compared with count units.</li>
- *   <li>{@link #STAPLES} (water) are always treated as available because tap water is not
- *       something users track as a pantry item.</li>
  *   <li>Items whose expiry date is before {@code today} are ignored; an item expiring today
  *       can still be used.</li>
  * </ul>
@@ -34,9 +34,6 @@ import java.util.Set;
  * <p>This class has no Android dependencies so it can be unit-tested with plain JUnit.
  */
 public final class RecipeMatcher {
-
-    /** Ingredients that are always considered available (normalised names). */
-    public static final Set<String> STAPLES = Collections.singleton("water");
 
     /** Tolerance for floating-point rounding when comparing quantities. */
     private static final double EPSILON = 1e-6;
@@ -153,12 +150,9 @@ public final class RecipeMatcher {
             return valueOf(byDimension, Dimension.MASS) + valueOf(byDimension, Dimension.VOLUME);
         }
 
-        /** Returns true when the pantry holds enough of this ingredient, or it is a staple. */
+        /** Returns true when the pantry holds at least the required amount of this ingredient. */
         public boolean covers(RecipeIngredient ingredient) {
             String name = IngredientNormalizer.normalizeName(ingredient.getName());
-            if (STAPLES.contains(name)) {
-                return true;
-            }
             UnitType unit;
             try {
                 unit = IngredientNormalizer.parseUnit(ingredient.getUnit());
