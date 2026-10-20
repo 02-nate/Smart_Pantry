@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lighter tints keep status colours readable on dark surfaces. -->
+    <color name="status_available">#FF81C784</color>
+    <color name="status_missing">#FFEF9A9A</color>
+</resources>

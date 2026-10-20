@@ -35,6 +35,28 @@
     <string name="dialog_delete_title">Delete ingredient?</string>
     <string name="dialog_delete_message">Remove %1$s from your pantry?</string>
 
+    <!-- Suggested recipes -->
+    <string name="title_suggestions">Suggested recipes</string>
+    <string name="header_cook_now">Cook now</string>
+    <string name="header_almost_there">Almost there — missing 1 ingredient</string>
+    <string name="empty_suggestions">No recipes match your pantry yet — add more ingredients.</string>
+    <string name="missing_ingredient">Missing: %1$s</string>
+    <plurals name="recipe_all_available">
+        <item quantity="one">%1$d ingredient • all in your pantry</item>
+        <item quantity="other">%1$d ingredients • all in your pantry</item>
+    </plurals>
+
+    <!-- Recipe detail -->
+    <string name="header_ingredients">Ingredients</string>
+    <string name="header_method">Method</string>
+    <string name="status_available">✓</string>
+    <string name="status_missing">✗</string>
+    <string name="cd_status_available">In your pantry</string>
+    <string name="cd_status_missing">Missing or not enough</string>
+    <string name="ingredient_line">%1$s %2$s</string>
+    <string name="step_line">%1$d. %2$s</string>
+    <string name="toast_recipe_not_found">Recipe not found</string>
+
     <!-- Unit choices; must match the labels in UnitType. -->
     <string-array name="units" translatable="false">
         <item>g</item>

@@ -10,4 +10,7 @@
     <dimen name="empty_state_padding">32dp</dimen>
     <dimen name="field_spacing">12dp</dimen>
     <dimen name="button_spacing">8dp</dimen>
+    <dimen name="section_spacing">16dp</dimen>
+    <dimen name="status_icon_width">32dp</dimen>
+    <dimen name="step_spacing">8dp</dimen>
 </resources>

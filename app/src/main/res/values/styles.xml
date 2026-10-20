@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Section header on the suggestions screen. -->
+    <style name="SectionHeader">
+        <item name="android:paddingStart">@dimen/screen_padding</item>
+        <item name="android:paddingEnd">@dimen/screen_padding</item>
+        <item name="android:paddingTop">@dimen/screen_padding</item>
+        <item name="android:paddingBottom">@dimen/list_padding</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <!-- Sub-heading inside the recipe detail screen. -->
+    <style name="DetailHeader">
+        <item name="android:layout_marginTop">@dimen/section_spacing</item>
+        <item name="android:layout_marginBottom">@dimen/list_padding</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+</resources>

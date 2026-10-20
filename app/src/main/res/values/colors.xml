@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green_primary">#FF2E7D32</color>
     <color name="amber_secondary">#FFF9A825</color>
+    <color name="status_available">#FF2E7D32</color>
+    <color name="status_missing">#FFC62828</color>
 </resources>
