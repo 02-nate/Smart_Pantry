@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Active tab label is solid black; inactive tabs are black at 40% opacity. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/text_main" android:state_checked="true" />
+    <item android:color="@color/nav_inactive" />
+</selector>

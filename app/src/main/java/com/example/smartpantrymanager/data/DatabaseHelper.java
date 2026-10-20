@@ -120,22 +120,6 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         return getWritableDatabase().insert(TABLE_PANTRY, null, toValues(item));
     }
 
-    /**
-     * Replaces the whole pantry with the demo items. Clearing and inserting share one
-     * transaction, so the pantry is never left half-reset and demo items are never duplicated.
-     */
-    public void resetToDemoPantry() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        try {
-            db.delete(TABLE_PANTRY, null, null);
-            insertPantryRows(db, RecipeSeeder.demoPantry());
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-    }
-
     /** Returns every pantry item ordered by name, ignoring case. */
     public List<PantryItem> getAllPantryItems() {
         List<PantryItem> items = new ArrayList<>();

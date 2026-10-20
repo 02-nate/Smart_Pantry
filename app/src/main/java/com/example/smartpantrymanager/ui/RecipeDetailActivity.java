@@ -32,6 +32,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     private long recipeId;
     private TextView titleText;
+    private TextView ingredientsDetail;
+    private TextView methodDetail;
     private LinearLayout ingredientsContainer;
     private LinearLayout stepsContainer;
 
@@ -47,6 +49,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
         }
 
         titleText = findViewById(R.id.text_recipe_title);
+        ingredientsDetail = findViewById(R.id.text_ingredients_detail);
+        methodDetail = findViewById(R.id.text_method_detail);
         ingredientsContainer = findViewById(R.id.container_ingredients);
         stepsContainer = findViewById(R.id.container_steps);
         recipeId = getIntent().getLongExtra(EXTRA_RECIPE_ID, -1);
@@ -72,17 +76,24 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void bind(Recipe recipe, RecipeMatcher.PantryStock stock) {
-        setTitle(recipe.getName());
+        int ingredientCount = recipe.getIngredients().size();
+        // The toolbar title is the masthead eyebrow; the recipe name is the large title.
+        setTitle(getResources().getQuantityString(
+                R.plurals.recipe_eyebrow, ingredientCount, ingredientCount));
         titleText.setText(recipe.getName());
 
         LayoutInflater inflater = LayoutInflater.from(this);
         ingredientsContainer.removeAllViews();
+        int availableCount = 0;
         for (RecipeIngredient ingredient : recipe.getIngredients()) {
             View row = inflater.inflate(R.layout.item_recipe_ingredient, ingredientsContainer, false);
             TextView status = row.findViewById(R.id.text_status);
             TextView line = row.findViewById(R.id.text_ingredient);
 
             boolean available = stock.covers(ingredient);
+            if (available) {
+                availableCount++;
+            }
             status.setText(available ? R.string.status_available : R.string.status_missing);
             status.setTextColor(ContextCompat.getColor(this,
                     available ? R.color.status_available : R.color.status_missing));
@@ -94,16 +105,19 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     ingredient.getName()));
             ingredientsContainer.addView(row);
         }
+        ingredientsDetail.setText(getString(R.string.header_ingredients_detail,
+                availableCount, ingredientCount));
 
         stepsContainer.removeAllViews();
         List<String> steps = recipe.getStepList();
-        int stepSpacing = getResources().getDimensionPixelSize(R.dimen.step_spacing);
+        methodDetail.setText(getResources().getQuantityString(
+                R.plurals.header_method_detail, steps.size(), steps.size()));
         for (int i = 0; i < steps.size(); i++) {
-            TextView step = new TextView(this);
-            step.setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_BodyLarge);
-            step.setText(getString(R.string.step_line, i + 1, steps.get(i)));
-            step.setPadding(0, 0, 0, stepSpacing);
-            stepsContainer.addView(step);
+            View row = inflater.inflate(R.layout.item_recipe_step, stepsContainer, false);
+            ((TextView) row.findViewById(R.id.text_step_number))
+                    .setText(getString(R.string.two_digit, i + 1));
+            ((TextView) row.findViewById(R.id.text_step)).setText(steps.get(i));
+            stepsContainer.addView(row);
         }
     }
 }

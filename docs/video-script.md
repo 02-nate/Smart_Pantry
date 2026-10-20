@@ -11,11 +11,11 @@
 
 ## 1:00–3:30 — Live demo (emulator or phone)
 
-1. **Empty state, then the demo pantry and its suggestions** (≈ 0:30)
+> Before recording, uninstall the app (or clear its storage) so it starts with the pre-loaded demo pantry. Step 7 clears the pantry, so record it last.
+
+1. **The pre-loaded demo pantry and its suggestions** (≈ 0:20)
    - Say that the app opens with a demo pantry pre-loaded on first run.
-   - Settings → **Clear pantry** → confirm. Pantry tab: show the empty-state message.
-   - Settings → **Reset to demo pantry** → confirm.
-   - Pantry tab: show the 11 items. Point out "2 kg" mealie meal and "1 L" milk (auto-scale).
+   - Stock tab: point out the summary tiles (total items, expiring soon) and the 11 tiles. Point out "2 kg" mealie meal and "1 L" milk (auto-scale).
    - Suggestions tab: **Cook now** shows Chakalaka, Egg and Tomato Scramble, and Pap and Tomato Gravy. **Almost there** shows Cheese Omelette (cheese), Fried Cabbage (cabbage) and Morogo and Pap (spinach).
 2. **Delete carrots, and Chakalaka moves to Almost There** (≈ 0:25)
    - Pantry → tap **carrots** → **Delete** → confirm.
@@ -32,12 +32,15 @@
 6. **Close the app fully and reopen it, and the data has persisted** (≈ 0:20)
    - Open Recents and swipe the app away, then relaunch it.
    - The pantry still shows the edited items, because they are stored in SQLite.
+7. **Empty state** (≈ 0:15)
+   - Settings → **Clear pantry** → confirm.
+   - Stock tab: show the empty-state message. Recipes tab: show "No recipes match your pantry yet".
 
 ## 3:30–5:30 — Three concepts in the code
 
 ### Adapter (≈ 0:40)
 - File: `app/src/main/java/com/example/smartpantrymanager/ui/PantryAdapter.java`
-- Show `onCreateViewHolder` (inflates `item_pantry.xml`), the `PantryViewHolder` class (views found once) and `onBindViewHolder` (fills a row, resets and applies the expiry highlight).
+- Show `onCreateViewHolder` (inflates `item_pantry.xml`), the `PantryViewHolder` class (views found once) and `onBindViewHolder` (colours the tile by position, shows the zero-padded days left and turns it red when urgent).
 - Mention the `OnItemClickListener` interface and DiffUtil via `ListAdapter`.
 
 ### Intents (≈ 0:40)

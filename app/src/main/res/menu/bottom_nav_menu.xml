@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Text-only tabs; each "icon" is the dot that marks the active tab. -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_pantry"
-        android:icon="@drawable/ic_pantry"
+        android:icon="@drawable/nav_dot"
         android:title="@string/nav_pantry" />
     <item
         android:id="@+id/nav_suggestions"
-        android:icon="@drawable/ic_recipes"
+        android:icon="@drawable/nav_dot"
         android:title="@string/nav_suggestions" />
     <item
         android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_settings"
+        android:icon="@drawable/nav_dot"
         android:title="@string/nav_settings" />
 </menu>

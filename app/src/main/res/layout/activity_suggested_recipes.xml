@@ -23,30 +23,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/list_padding">
+            android:paddingBottom="@dimen/section_spacing">
 
             <TextView
-                style="@style/SectionHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/header_cook_now" />
+                style="@style/Masthead"
+                android:text="@string/display_suggestions" />
+
+            <include
+                android:id="@+id/summary_grid"
+                layout="@layout/view_summary_grid" />
+
+            <View style="@style/Hairline" />
+
+            <LinearLayout style="@style/SectionBar">
+
+                <TextView
+                    style="@style/Text.Meta"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/header_cook_now" />
+
+                <TextView
+                    style="@style/Text.Meta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/header_cook_now_detail" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_strict"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
+                android:paddingHorizontal="@dimen/gutter_card"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
+                tools:itemCount="2"
                 tools:listitem="@layout/item_recipe" />
 
             <TextView
                 android:id="@+id/text_no_strict"
+                style="@style/Text.Body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/screen_padding"
+                android:paddingHorizontal="@dimen/gutter_text"
+                android:paddingBottom="@dimen/gutter_text"
                 android:text="@string/empty_suggestions"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
                 android:visibility="gone"
                 tools:visibility="visible" />
 
@@ -54,28 +76,35 @@
                 android:id="@+id/section_almost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_gap"
                 android:orientation="vertical"
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <com.google.android.material.divider.MaterialDivider
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/section_spacing"
-                    app:dividerInsetEnd="@dimen/screen_padding"
-                    app:dividerInsetStart="@dimen/screen_padding" />
+                <View style="@style/Hairline" />
 
-                <TextView
-                    style="@style/SectionHeader"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/header_almost_there" />
+                <LinearLayout style="@style/SectionBar">
+
+                    <TextView
+                        style="@style/Text.Meta"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/header_almost_there" />
+
+                    <TextView
+                        style="@style/Text.Meta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/header_almost_there_detail" />
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_almost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
+                    android:paddingHorizontal="@dimen/gutter_card"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="2"
                     tools:listitem="@layout/item_recipe" />
@@ -84,10 +113,8 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nav_menu" />
+    <include
+        android:id="@+id/bottom_nav_container"
+        layout="@layout/view_bottom_nav" />
 
 </LinearLayout>

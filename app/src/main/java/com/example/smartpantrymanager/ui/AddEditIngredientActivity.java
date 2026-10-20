@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -94,6 +95,12 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
         boolean editMode = editingItem != null;
         setTitle(editMode ? R.string.title_edit_ingredient : R.string.title_add_ingredient);
+        TextView display = findViewById(R.id.text_display);
+        if (editMode) {
+            display.setText(editingItem.getName());
+        } else {
+            display.setText(R.string.display_add_ingredient);
+        }
         deleteButton.setVisibility(editMode ? View.VISIBLE : View.GONE);
 
         if (savedInstanceState != null) {

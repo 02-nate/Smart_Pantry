@@ -1,16 +1,27 @@
 <resources>
-    <!-- Base application theme, shared by light and dark mode. -->
-    <style name="Base.Theme.SmartPantryManager" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/green_primary</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/amber_secondary</item>
-        <item name="colorOnSecondary">@color/black</item>
+    <!-- "The Pantry Archive": white page, black type, flat pastel tiles. Light only. -->
+    <style name="Base.Theme.SmartPantryManager" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bg_white</item>
+        <item name="colorPrimary">@color/bg_black</item>
+        <item name="colorOnPrimary">@color/bg_white</item>
+        <item name="colorSecondary">@color/bg_black</item>
+        <item name="colorOnSecondary">@color/bg_white</item>
+        <item name="colorSurface">@color/bg_white</item>
+        <item name="colorOnSurface">@color/text_main</item>
+        <item name="colorSurfaceContainer">@color/bg_white</item>
+        <item name="colorSurfaceContainerHigh">@color/bg_white</item>
+        <item name="colorOnSurfaceVariant">@color/text_muted</item>
+        <item name="colorError">@color/urgent</item>
+        <item name="toolbarStyle">@style/Widget.Pantry.Toolbar</item>
+        <item name="materialButtonStyle">@style/Widget.Pantry.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Pantry.Button.Outlined</item>
+        <item name="textInputStyle">@style/Widget.Pantry.TextInputLayout</item>
     </style>
 
     <style name="Theme.SmartPantryManager" parent="Base.Theme.SmartPantryManager">
         <!-- Transparent system bars for edge-to-edge; layouts use fitsSystemWindows. -->
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

@@ -20,7 +20,7 @@ import java.time.LocalDate;
 
 /**
  * Shows recipes the user can cook now (strict matches) and, in a separate section,
- * recipes that are missing exactly one ingredient.
+ * recipes that are missing exactly one ingredient. Summary tiles show both counts.
  */
 public class SuggestedRecipesActivity extends AppCompatActivity {
 
@@ -29,6 +29,8 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
     private RecipeAdapter almostAdapter;
     private TextView noStrictText;
     private View almostSection;
+    private TextView cookNowValue;
+    private TextView almostValue;
     private BottomNavigationView bottomNav;
 
     @Override
@@ -42,6 +44,11 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         db = DatabaseHelper.getInstance(this);
         noStrictText = findViewById(R.id.text_no_strict);
         almostSection = findViewById(R.id.section_almost);
+
+        ((TextView) findViewById(R.id.tile_left_label)).setText(R.string.header_cook_now);
+        ((TextView) findViewById(R.id.tile_right_label)).setText(R.string.header_almost_there);
+        cookNowValue = findViewById(R.id.tile_left_value);
+        almostValue = findViewById(R.id.tile_right_value);
 
         strictAdapter = new RecipeAdapter(false, this::openRecipe);
         almostAdapter = new RecipeAdapter(true, this::openRecipe);
@@ -66,10 +73,13 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         RecipeMatcher.MatchResults results = RecipeMatcher.match(
                 db.getAllPantryItems(), db.getAllRecipesWithIngredients(), LocalDate.now());
 
-        strictAdapter.submitList(results.getStrict());
+        cookNowValue.setText(getString(R.string.two_digit, results.getStrict().size()));
+        almostValue.setText(getString(R.string.two_digit, results.getAlmostThere().size()));
+
+        strictAdapter.submitResults(results.getStrict());
         noStrictText.setVisibility(results.getStrict().isEmpty() ? View.VISIBLE : View.GONE);
 
-        almostAdapter.submitList(results.getAlmostThere());
+        almostAdapter.submitResults(results.getAlmostThere());
         almostSection.setVisibility(results.getAlmostThere().isEmpty() ? View.GONE : View.VISIBLE);
     }
 

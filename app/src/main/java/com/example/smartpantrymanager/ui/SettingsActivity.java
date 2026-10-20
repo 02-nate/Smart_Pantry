@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartpantrymanager.R;
 import com.example.smartpantrymanager.data.DatabaseHelper;
-import com.example.smartpantrymanager.data.RecipeSeeder;
 import com.example.smartpantrymanager.util.NavHelper;
 import com.example.smartpantrymanager.util.Prefs;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -19,7 +18,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-/** User preferences plus pantry maintenance actions (reset to demo data, clear all). */
+/** User preferences plus the "Clear pantry" maintenance action. */
 public class SettingsActivity extends AppCompatActivity {
 
     private DatabaseHelper db;
@@ -47,9 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
         unitsGroup.setOnCheckedChangeListener((group, checkedId) ->
                 Prefs.setAutoScaleUnits(this, checkedId == R.id.radio_auto_scale));
 
-        MaterialButton resetDemoButton = findViewById(R.id.button_reset_demo);
         MaterialButton clearButton = findViewById(R.id.button_clear_pantry);
-        resetDemoButton.setOnClickListener(v -> confirmResetDemo());
         clearButton.setOnClickListener(v -> confirmClear());
 
         TextView about = findViewById(R.id.text_about);
@@ -60,20 +57,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         NavHelper.highlight(bottomNav, R.id.nav_settings);
-    }
-
-    private void confirmResetDemo() {
-        int demoCount = RecipeSeeder.demoPantry().size();
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.dialog_reset_demo_title)
-                .setMessage(getResources().getQuantityString(
-                        R.plurals.dialog_reset_demo_message, demoCount, demoCount))
-                .setNegativeButton(R.string.action_cancel, null)
-                .setPositiveButton(R.string.action_reset, (dialog, which) -> {
-                    db.resetToDemoPantry();
-                    Toast.makeText(this, R.string.toast_demo_reset, Toast.LENGTH_SHORT).show();
-                })
-                .show();
     }
 
     private void confirmClear() {

@@ -22,86 +22,113 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/screen_padding">
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_highlight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/setting_highlight_expiring"
-                android:textAppearance="?attr/textAppearanceBodyLarge" />
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/setting_highlight_expiring_summary"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="?attr/colorOnSurfaceVariant" />
+                style="@style/Masthead"
+                android:text="@string/display_settings" />
 
-            <TextView
-                style="@style/DetailHeader"
+            <!-- Expiry -->
+            <View style="@style/Hairline" />
+
+            <LinearLayout style="@style/SectionBar">
+
+                <TextView
+                    style="@style/Text.Meta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/header_expiry" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/header_display_units" />
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/gutter_text"
+                android:paddingBottom="@dimen/section_spacing">
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_highlight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_highlight_expiring"
+                    android:textAppearance="@style/Text.Body" />
+
+                <TextView
+                    style="@style/Text.Meta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_highlight_expiring_summary"
+                    android:textColor="@color/text_muted" />
+            </LinearLayout>
+
+            <!-- Display units -->
+            <View style="@style/Hairline" />
+
+            <LinearLayout style="@style/SectionBar">
+
+                <TextView
+                    style="@style/Text.Meta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/header_display_units" />
+            </LinearLayout>
 
             <RadioGroup
                 android:id="@+id/radio_units"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/gutter_text"
+                android:paddingBottom="@dimen/section_spacing">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/radio_base_units"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/units_base" />
+                    android:text="@string/units_base"
+                    android:textAppearance="@style/Text.Body" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/radio_auto_scale"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/units_auto_scale" />
+                    android:text="@string/units_auto_scale"
+                    android:textAppearance="@style/Text.Body" />
             </RadioGroup>
 
-            <TextView
-                style="@style/DetailHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/header_pantry_data" />
+            <!-- Pantry data -->
+            <View style="@style/Hairline" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_reset_demo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/action_reset_demo" />
+            <LinearLayout style="@style/SectionBar">
+
+                <TextView
+                    style="@style/Text.Meta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/header_pantry_data" />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_clear_pantry"
-                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/button_spacing"
-                android:text="@string/action_clear_pantry"
-                android:textColor="?attr/colorError"
-                app:strokeColor="?attr/colorError" />
+                android:layout_marginHorizontal="@dimen/gutter_text"
+                android:text="@string/action_clear_pantry" />
 
             <TextView
                 android:id="@+id/text_about"
+                style="@style/Text.Meta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/empty_state_padding"
-                android:gravity="center"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                android:padding="@dimen/gutter_text"
+                android:textColor="@color/text_muted"
                 tools:text="Smart Pantry Manager · version 1.0" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nav_menu" />
+    <include
+        android:id="@+id/bottom_nav_container"
+        layout="@layout/view_bottom_nav" />
 
 </LinearLayout>

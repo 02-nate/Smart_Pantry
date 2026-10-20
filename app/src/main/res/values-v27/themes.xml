@@ -1,0 +1,9 @@
+<resources>
+    <!-- Same as values/, plus dark navigation-bar buttons on the white page (API 27+). -->
+    <style name="Theme.SmartPantryManager" parent="Base.Theme.SmartPantryManager">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

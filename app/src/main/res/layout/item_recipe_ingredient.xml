@@ -3,26 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
+    android:baselineAligned="true"
     android:orientation="horizontal"
-    android:paddingVertical="@dimen/text_spacing_small">
+    android:paddingVertical="@dimen/spacing_small">
 
     <TextView
         android:id="@+id/text_status"
+        style="@style/Text.Body"
         android:layout_width="@dimen/status_icon_width"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAppearance="?attr/textAppearanceTitleMedium"
-        android:textStyle="bold"
         tools:text="@string/status_available"
         tools:textColor="@color/status_available" />
 
     <TextView
         android:id="@+id/text_ingredient"
+        style="@style/Text.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textAppearance="?attr/textAppearanceBodyLarge"
         tools:text="2 pcs tomato" />
 
 </LinearLayout>

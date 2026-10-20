@@ -1,6 +1,6 @@
 package com.example.smartpantrymanager.ui;
 
-import android.content.res.Resources;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartpantrymanager.R;
 import com.example.smartpantrymanager.matching.MatchResult;
 import com.example.smartpantrymanager.model.Recipe;
+import com.example.smartpantrymanager.util.CardFills;
+import com.google.android.material.card.MaterialCardView;
+
+import java.util.List;
 
 /**
- * RecyclerView adapter for recipe suggestion cards. The same adapter serves both the
- * "Cook now" list and the "Almost there" list; only the summary line differs.
+ * RecyclerView adapter for recipe suggestion tiles. The same adapter serves both the
+ * "Cook now" list (numeral = ingredient count) and the "Almost there" list
+ * (numeral = missing count, footer names the missing ingredient).
  */
 public class RecipeAdapter extends ListAdapter<MatchResult, RecipeAdapter.RecipeViewHolder> {
 
@@ -38,6 +43,11 @@ public class RecipeAdapter extends ListAdapter<MatchResult, RecipeAdapter.Recipe
         this.listener = listener;
     }
 
+    /** Shows a new list, rebinding every row because card fills depend on position. */
+    public void submitResults(List<MatchResult> results) {
+        submitList(results, () -> notifyItemRangeChanged(0, getItemCount()));
+    }
+
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,29 +60,38 @@ public class RecipeAdapter extends ListAdapter<MatchResult, RecipeAdapter.Recipe
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         MatchResult result = getItem(position);
         Recipe recipe = result.getRecipe();
-        Resources res = holder.itemView.getResources();
+        Context context = holder.itemView.getContext();
 
+        CardFills.apply(holder.card, position);
         holder.name.setText(recipe.getName());
         if (showMissing && !result.getMissing().isEmpty()) {
-            holder.summary.setText(res.getString(R.string.missing_ingredient,
-                    result.getMissing().get(0)));
+            holder.number.setText(context.getString(R.string.two_digit, result.getMissing().size()));
+            holder.footerStart.setText(R.string.label_missing);
+            holder.footerEnd.setText(result.getMissing().get(0));
         } else {
-            int count = recipe.getIngredients().size();
-            holder.summary.setText(res.getQuantityString(R.plurals.recipe_all_available,
-                    count, count));
+            holder.number.setText(
+                    context.getString(R.string.two_digit, recipe.getIngredients().size()));
+            holder.footerStart.setText(R.string.label_ingredients);
+            holder.footerEnd.setText(R.string.label_all_in_pantry);
         }
         holder.itemView.setOnClickListener(v -> listener.onRecipeClick(recipe));
     }
 
-    /** Holds the views of one recipe card. */
+    /** Holds the views of one recipe tile. */
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
+        final MaterialCardView card;
         final TextView name;
-        final TextView summary;
+        final TextView number;
+        final TextView footerStart;
+        final TextView footerEnd;
 
         RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
+            card = (MaterialCardView) itemView;
             name = itemView.findViewById(R.id.text_recipe_name);
-            summary = itemView.findViewById(R.id.text_recipe_summary);
+            number = itemView.findViewById(R.id.text_recipe_number);
+            footerStart = itemView.findViewById(R.id.text_footer_start);
+            footerEnd = itemView.findViewById(R.id.text_footer_end);
         }
     }
 

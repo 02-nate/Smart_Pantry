@@ -14,10 +14,11 @@ Suggestions follow a **strict matching rule**: a recipe appears under "Cook now"
 - 20 built-in South African recipes (Chakalaka, Pap and Tomato Gravy, Bobotie, Vetkoek and more)
 - Strict "Cook now" suggestions plus an "Almost there — missing 1 ingredient" list
 - Recipe detail with a ✓ / ✗ status for each ingredient and a numbered method
-- Expiry highlighting: amber for items expiring within 3 days, red for expired items (expired items are never used for suggestions)
-- Settings: toggle highlighting, choose base units (g / ml) or auto-scale (kg / L), reset to the demo pantry, clear the pantry
-- Bottom navigation between Pantry, Suggestions and Settings
-- Material 3 design with light and dark themes
+- Expiry countdown on every pantry tile; with highlighting on, items expiring within 3 days are labelled "Expires soon", the number turns red at 2 days or fewer, and expired items are labelled as not used for suggestions
+- Summary tiles: total items and expiring-soon count on the pantry screen, "Cook now" and "Almost there" counts on the suggestions screen
+- Settings: toggle highlighting, choose base units (g / ml) or auto-scale (kg / L), clear the pantry
+- Text-only bottom navigation between Stock, Recipes and Settings
+- "Pantry Archive" visual design: white page, bold black type, flat pastel tiles with 32dp corners
 - Fully offline: no account, no network, no location
 
 ## Database choice
@@ -51,9 +52,9 @@ Why SQLite:
 2. In Android Studio choose **File → Open** and select the project folder.
 3. Let Gradle sync finish.
 4. Pick an emulator or a connected device running Android 8.0 or later and press **Run**.
-5. The app opens with a demo pantry already loaded. To start from scratch use **Settings → Clear pantry**; to restore the demo data use **Settings → Reset to demo pantry**.
+5. The app opens with a demo pantry already loaded. To start from scratch use **Settings → Clear pantry**.
 
-> If an older build of the app is already installed, the demo pantry is only added when the database is first created. Uninstall the app (or clear its storage) once to see the pre-loaded pantry.
+> The demo pantry is only added when the database is first created. To get it back after clearing or editing the pantry (or if an older build was already installed), uninstall the app or clear its storage, then run it again.
 
 **Run the unit tests**
 
@@ -88,6 +89,7 @@ app/src/main/java/com/example/smartpantrymanager/
 │   ├── PantryAdapter.java
 │   └── RecipeAdapter.java
 └── util/
+    ├── CardFills.java               card colour rotation (lime, white, lavender, mint)
     ├── NavHelper.java
     ├── Prefs.java
     └── QuantityFormatter.java

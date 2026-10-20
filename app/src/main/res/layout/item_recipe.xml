@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Recipe tile: name, a hero numeral, then a hairline footer with two micro-labels. -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_recipe"
-    style="?attr/materialCardViewElevatedStyle"
+    style="@style/Widget.Pantry.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/card_margin_horizontal"
-    android:layout_marginVertical="@dimen/card_margin_vertical"
+    android:layout_marginBottom="@dimen/card_gap"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    app:cardBackgroundColor="@color/bg_green">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,18 +20,44 @@
 
         <TextView
             android:id="@+id/text_recipe_name"
+            style="@style/Text.ItemName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:layout_marginBottom="@dimen/name_to_number"
             tools:text="Chakalaka" />
 
         <TextView
-            android:id="@+id/text_recipe_summary"
+            android:id="@+id/text_recipe_number"
+            style="@style/Text.Days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="07" />
+
+        <View style="@style/Hairline" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/text_spacing_small"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            tools:text="7 ingredients • all in your pantry" />
+            android:baselineAligned="true"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/footer_padding_top">
+
+            <TextView
+                android:id="@+id/text_footer_start"
+                style="@style/Text.Meta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_medium"
+                android:layout_weight="1"
+                tools:text="@string/label_ingredients" />
+
+            <TextView
+                android:id="@+id/text_footer_end"
+                style="@style/Text.Meta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/label_all_in_pantry" />
+        </LinearLayout>
 
     </LinearLayout>
 

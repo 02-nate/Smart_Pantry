@@ -212,9 +212,9 @@ public final class RecipeSeeder {
     }
 
     /**
-     * Returns the demo pantry, pre-loaded on first run and restored by "Reset to demo pantry"
-     * in Settings. It is chosen so that Chakalaka, Pap and Tomato Gravy, and Egg and Tomato
-     * Scramble match strictly while several other recipes are one ingredient short.
+     * Returns the demo pantry, pre-loaded when the database is first created. It is chosen
+     * so that Chakalaka, Pap and Tomato Gravy, and Egg and Tomato Scramble match strictly
+     * while several other recipes are one ingredient short.
      */
     public static List<PantryItem> demoPantry() {
         return Arrays.asList(
